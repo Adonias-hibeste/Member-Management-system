@@ -95,9 +95,9 @@
     <div id="layoutSidenav_content">
     <main>
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Edit Post</h1>
+        <h1 class="mt-4">Edit Events</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Edit Post</li>
+            <li class="breadcrumb-item active">Edit Events</li>
         </ol>
         <div class="card mb-4">
             @if($errors->any())
@@ -108,47 +108,46 @@
                 </div>
             @endif
             <div class="card-header">
-               <h4>Edit Posts
-               <a href="{{ url('admin/post')}}" class="btn btn-primary float-end" style="background-color: red; color: white;">BACK</a>
+               <h4>Edit News
+               <a href="{{ url('admin/events')}}" class="btn btn-primary float-end" style="background-color: red; color: white;">BACK</a>
                 </h4>
             </div>
             <div class="card-body">
-                <form action="{{ url('admin/updatePost/'.$posts->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ url('admin/updateevents/'.$eventsd->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="form-group mb-3">
-                        <label for="name">Post Name</label>
-                        <input type="text" name="name" value="{{$posts->name}}" class="form-control">
+                        <label for="name">Events Name</label>
+                        <input type="text" name="name"value="{{$eventsd->name}}" class="form-control">
                     </div>
                     <div class="form-group mb-3">
-                        <label for="slug">Slug</label>
-                        <input type="text" name="slug" value="{{$posts->slug}}" class="form-control">
+                        <label for="type">type</label>
+                        <input type="text" name="type"value="{{$eventsd->type}}" class="form-control">
                     </div>
                     <div class="form-group mb-3">
                         <label for="description">Description</label>
-                        <textarea name="description" class="form-control" rows="4">{{ $posts->description }}</textarea>
+                        <textarea name="description" id="mysummernote" class="form-control" rows="4">{{ $eventsd->description }}</textarea>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="yt_iframe">YouTube Iframe Link</label>
-                        <input type="file" name="yt_iframe" value="{{$posts->yt_iframe}}" class="form-control">
+                        <label for="image_path">Image Link</label>
+                        <input type="file" name="image_path" value="{{$eventsd->image_path}}" class="form-control">
                     </div>
+
                     <div class="form-group mb-3">
-                        <label for="meta_title">Meta Title</label>
-                        <input type="text" name="meta_title"value="{{$posts->meta_title}}" class="form-control">
+    <label for="event_date">Event Date</label>
+    <input type="date" name="event_date"value="{{$eventsd->event_date}}"  class="form-control">
                     </div>
+
                     <div class="form-group mb-3">
-                        <label for="meta_description">Meta Description</label>
-                        <textarea name="meta_description" class="form-control" rows="4">{{ $posts->meta_description }}</textarea>
+    <label for="event_time">Event Time</label>
+    <input type="time" name="event_time"value="{{$eventsd->event_time}}" class="form-control">
+             </div>
+             <div class="form-group mb-3">
+                        <label for="location">Location</label>
+                        <input type="text" name="location"value="{{$eventsd->location}}" class="form-control">
                     </div>
-                    <div class="form-group mb-3">
-                        <label for="meta_keyword">Meta Keyword</label>
-                        <textarea name="meta_keyword" class="form-control" rows="4">{{ $posts->meta_keyword }}</textarea>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="status">Status</label>
-                        <input type="checkbox" name="status" {{ $posts->status == '1' ? 'checked' : '' }}>
-                    </div>
-                    <button type="submit" class="btn btn-primary">update Post</button>
+
+                    <button type="submit" class="btn btn-primary">update Events</button>
                 </form>
             </div>
         </div>
