@@ -26,12 +26,31 @@ Route::get('/', function () {
     Route::get('/admin/post', [App\Http\Controllers\PostController::class, 'Post'])->name('admin.post');
     Route::get('/admin/createpost', [App\Http\Controllers\PostController::class, 'Create'])->name('admin.createpost');
     Route::post('/admin/createpost', [App\Http\Controllers\PostController::class, 'Store'])->name('admin.createpost-post');
-
     Route::get('/admin/post/{post_id}', [App\Http\Controllers\PostController::class, 'Edit'])->name('admin.edit');
     Route::put('/admin/updatePost/{post_id}', [App\Http\Controllers\PostController::class, 'Update']);
     Route::get('admin/deletePost/{post_id}', [App\Http\Controllers\PostController::class, 'Destroy']);
+
+
+
+    Route::get('/admin/news', [App\Http\Controllers\NewsController::class, 'News'])->name('admin.news');
+    Route::get('/admin/createnews', [App\Http\Controllers\NewsController::class, 'Create'])->name('admin.createnews');
+    Route::post('/admin/createnews', [App\Http\Controllers\NewsController::class, 'Store'])->name('admin.createnews-post');
+    Route::get('/admin/news/{news_id}', [App\Http\Controllers\NewsController::class, 'Edit'])->name('admin.editnews');
+    Route::put('/admin/updatenews/{news_id}', [App\Http\Controllers\NewsController::class, 'Update']);
+    Route::get('admin/deletenews/{news_id}', [App\Http\Controllers\NewsController::class, 'Destroy']);
+
+
+
+
+
+
+
+
+
     Route::get('/admin/registeredusers', [App\Http\Controllers\RegUserController::class, 'Users'])->name('admin.registeredusers');
-    Route::get('/admin/registeredusers/{user_id}', [App\Http\Controllers\RegUserController::class, 'EditUser'])->name('admin.edituser');
-    
+    Route::get('/admin/registeredusers/{user_id}', [App\Http\Controllers\RegUserController::class, 'EditUser'])->name('admin.edituser'); 
     Route::put('/admin/updateuser/{user_id}', [App\Http\Controllers\RegUserController::class, 'Update']);
     
+
+
+

@@ -48,14 +48,11 @@
                         </a>
                        
                         <div class="sb-sidenav-menu-heading">Manage</div>
-                        <a class="nav-link" href="{{Route('admin.registeredusers')}}">View Users</a>
-                                <a class="nav-link" href="#!">Payments </a>
-                                <a class="nav-link" href="#!"> Events</a>
-                              
-                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCategories" aria-expanded="false" aria-controls="collapseCategories">
-                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                        Blog Post
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCategories" aria-expanded="false" aria-controls="collapseCategories">
+                        <div class="sb-nav-link-icon">📝</div> <!-- Memo icon -->
+                                Blog Post
                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+
                     </a>
                     <div class="collapse" id="collapseCategories" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
@@ -63,7 +60,25 @@
                         <a class="nav-link" href="{{url('/admin/post')}}">View Post</a>
                         </nav>
                     </div>
-                         <a class="nav-link" href="#!">News Updates</a>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCategories" aria-expanded="false" aria-controls="collapseCategories">
+                    <div class="sb-nav-link-icon">📰</div> <!-- Newspaper icon -->
+                                News and Updates
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+
+                    </a>
+                    <div class="collapse" id="collapseCategories" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="{{route('admin.createnews')}}">Add News</a>
+                        <a class="nav-link" href="{{url('/admin/news')}}">View News</a>
+                        </nav>
+                    </div>
+                    <a class="nav-link" href="{{ route('admin.registeredusers') }}">&#128100; View Users</a>
+                    <a class="nav-link" href="#!">&#128179; Payments</a>
+                    <a class="nav-link" href="#!">🎉 Events</a>
+
+                              
+                   
+
                     </div>
                 </div>
               

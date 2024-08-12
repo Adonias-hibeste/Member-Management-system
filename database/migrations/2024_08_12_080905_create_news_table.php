@@ -11,20 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('news', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug');
+            $table->String('name');
+            $table->String('slug');
             $table->mediumText('description');
-            $table->string('image');
-            $table->string('meta_title');
-            $table->text('meta_description');
-            $table->text('meta_keyword');
-            $table->tinyInteger('navbar_status')->default('0');
+            $table->String('yt_iframe')->nullable();
+            $table->String('meta_title');
+            $table->mediumText('meta_description')->nullable();
+            $table->mediumText('meta_keyword')->nullable();
             $table->tinyInteger('status')->default('0');
-            $table->Integer('created_by');
            
-
             $table->timestamps();
         });
     }
@@ -34,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('news');
     }
 };

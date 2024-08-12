@@ -87,64 +87,80 @@
     <div id="layoutSidenav_content">
     <main>
     <div class="container-fluid px-4">
-        <div class="card mt-4">
+        <h1 class="mt-4">Add News</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Add News</li>
+        </ol>
+        <div class="card mb-4">
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    @foreach($errors->all() as $error)
+                        <div>{{ $error }}</div>
+                    @endforeach
+                </div>
+            @endif
             <div class="card-header">
-                <h4 class="d-flex justify-content-between align-items-center">
-                    Blog Post
-                    <a href="{{route('admin.createpost')}}" class="btn btn-primary btn-sm">Add Post</a>
-                </h4>
+                <i class="fas fa-plus"></i>
+                Add New News
             </div>
             <div class="card-body">
-                @if (session('message'))
-                    <div class="alert alert-success">
-                        {{ session('message') }}
+                <form action="{{ url('admin/createnews') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group mb-3">
+                        <label for="name">News Name</label>
+                        <input type="text" name="name" class="form-control">
                     </div>
-                @endif
-                <table class="table table-bordered table-hover">
-                    <thead style="background-color: #343a40; color: white;">
-                        <tr>
-                            <th>ID</th>
-                            <th>Post Name</th>
-                            <th>Status</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($posts as $item)
-                            <tr>
-                                <td>{{$item->id}}</td>
-                                <td>{{$item->name}}</td>
-                                <td>{{$item->state=='1'?'Hidden':'Visible'}}</td>
-                                <td>
-                                    <a href="{{url('admin/post/'.$item->id)}}" class="btn btn-primary" >Edit</a>
-                                </td>
-                                <td>
-                                <a href="{{ url('admin/deletePost/'.$item->id) }}" class="btn btn-primary" style="background-color: red; color: white; border-color: red;">Delete</a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                    <div class="form-group mb-3">
+                        <label for="slug">Slug</label>
+                        <input type="text" name="slug" class="form-control">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="description">Description</label>
+                        <textarea name="description" id="mysummernote" class="form-control" rows="4"></textarea>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="yt_iframe">YouTube Iframe Link</label>
+                        <input type="file" name="yt_iframe" value="{{ old('yt_iframe') }}" class="form-control">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="meta_title">Meta Title</label>
+                        <input type="text" name="meta_title" class="form-control">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="meta_description">Meta Description</label>
+                        <textarea name="meta_description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="meta_keyword">Meta Keyword</label>
+                        <textarea name="meta_keyword" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="status">Status</label>
+                        <input type="checkbox" name="status">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add News</button>
+                </form>
             </div>
         </div>
     </div>
 </main>
+
+    </div>
+</div>
 
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
                         <div class="text-muted">Copyright © Your Website 2023</div>
                         <div>
-                        <a href="#">Privacy Policy</a>
+                            <a href="#">Privacy Policy</a>
                             ·
                             <a href="#">Terms & Conditions</a>
                         </div>
                     </div>
                 </div>
             </footer>
-            </div>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="{{asset('admin/js/scripts.js')}}"></script>

@@ -90,8 +90,8 @@
         <div class="card mt-4">
             <div class="card-header">
                 <h4 class="d-flex justify-content-between align-items-center">
-                    Blog Post
-                    <a href="{{route('admin.createpost')}}" class="btn btn-primary btn-sm">Add Post</a>
+                    News and Updates
+                    <a href="{{route('admin.createnews')}}" class="btn btn-primary btn-sm">Add News</a>
                 </h4>
             </div>
             <div class="card-body">
@@ -104,7 +104,7 @@
                     <thead style="background-color: #343a40; color: white;">
                         <tr>
                             <th>ID</th>
-                            <th>Post Name</th>
+                            <th>News Name</th>
                             <th>Status</th>
                             <th>Edit</th>
                             <th>Delete</th>
@@ -112,16 +112,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($posts as $item)
+                        @foreach($newsd as $item)
                             <tr>
                                 <td>{{$item->id}}</td>
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->state=='1'?'Hidden':'Visible'}}</td>
                                 <td>
-                                    <a href="{{url('admin/post/'.$item->id)}}" class="btn btn-primary" >Edit</a>
+                                    <a href="{{url('admin/news/'.$item->id)}}" class="btn btn-primary" >Edit</a>
                                 </td>
                                 <td>
-                                <a href="{{ url('admin/deletePost/'.$item->id) }}" class="btn btn-primary" style="background-color: red; color: white; border-color: red;">Delete</a>
+                                <a href="{{ url('admin/deletenews/'.$item->id) }}" class="btn btn-primary" style="background-color: red; color: white; border-color: red;">Delete</a>
                                 </td>
                             </tr>
                         @endforeach
