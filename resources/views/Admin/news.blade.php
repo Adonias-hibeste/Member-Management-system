@@ -113,7 +113,7 @@
                         <tr>
                             <th>ID</th>
                             <th>News Name</th>
-                            <th>Status</th>
+                           
                             <th>Edit</th>
                             <th>Delete</th>
 
@@ -124,7 +124,7 @@
                             <tr>
                                 <td>{{$item->id}}</td>
                                 <td>{{$item->name}}</td>
-                                <td>{{$item->state=='1'?'Hidden':'Visible'}}</td>
+                              
                                 <td>
                                     <a href="{{url('admin/news/'.$item->id)}}" class="btn btn-primary" >Edit</a>
                                 </td>

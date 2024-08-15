@@ -23,14 +23,16 @@ public function Store(PostFormRequest $request){
    
     $post = new Post;
     $post->name = $data['name'];
-    $post->slug = $data['slug'];
+   
     $post->description = $data['description'];
-    $post->yt_iframe = $data['yt_iframe'] ?? '';
-    $post->meta_title = $data['meta_title'];
-    $post->meta_description = $data['meta_description'];
-    $post->meta_keyword = $data['meta_keyword'];
-    $post->status = $request->status==true? '1':'0';
-   // $post->created_by = Auth::user()->id;
+    if($request->hasfile('image')){
+        $file = $request->file('image');
+        $filename = time(). "." .$file->getClientOriginalExtension();
+       
+        $file->move('uploads/posts', $filename);
+        $post->image = 'uploads/posts/'.$filename;
+    }
+  
     
     $post->save();
 
@@ -46,14 +48,16 @@ public function Store(PostFormRequest $request){
    
     $post = Post::find($post_id);
     $post->name = $data['name'];
-    $post->slug = $data['slug'];
+   
     $post->description = $data['description'];
-    $post->yt_iframe = $data['yt_iframe'] ?? '';
-    $post->meta_title = $data['meta_title'];
-    $post->meta_description = $data['meta_description'];
-    $post->meta_keyword = $data['meta_keyword'];
-    $post->status = $request->status==true? '1':'0';
-   // $post->created_by = Auth::user()->id;
+    if($request->hasfile('image')){
+        $file = $request->file('image');
+        $filename = time(). "." .$file->getClientOriginalExtension();
+       
+        $file->move('uploads/posts', $filename);
+        $post->image = 'uploads/posts/'.$filename;
+    }
+  
     
     $post->update();
 

@@ -118,33 +118,14 @@
                         <label for="name">News Name</label>
                         <input type="text" name="name" class="form-control">
                     </div>
-                    <div class="form-group mb-3">
-                        <label for="slug">Slug</label>
-                        <input type="text" name="slug" class="form-control">
-                    </div>
+                    
                     <div class="form-group mb-3">
                         <label for="description">Description</label>
                         <textarea name="description" id="mysummernote" class="form-control" rows="4"></textarea>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="yt_iframe">YouTube Iframe Link</label>
-                        <input type="file" name="yt_iframe" value="{{ old('yt_iframe') }}" class="form-control">
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="meta_title">Meta Title</label>
-                        <input type="text" name="meta_title" class="form-control">
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="meta_description">Meta Description</label>
-                        <textarea name="meta_description" class="form-control" rows="3"></textarea>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="meta_keyword">Meta Keyword</label>
-                        <textarea name="meta_keyword" class="form-control" rows="3"></textarea>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="status">Status</label>
-                        <input type="checkbox" name="status">
+                        <label> Upload Image</label>
+                        <input type="file" name="image"  class="form-control">
                     </div>
                     <button type="submit" class="btn btn-primary">Add News</button>
                 </form>

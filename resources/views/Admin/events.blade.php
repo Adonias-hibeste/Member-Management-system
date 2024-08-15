@@ -112,8 +112,8 @@
                     <thead style="background-color: #343a40; color: white;">
                         <tr>
                             <th>ID</th>
-                            <th>News Name</th>
-                            <th>Location</th>
+                            <th>Events Name</th>
+                           
                             <th>Edit</th>
                             <th>Delete</th>
 
@@ -124,7 +124,7 @@
                             <tr>
                                 <td>{{$item->id}}</td>
                                 <td>{{$item->name}}</td>
-                                <td>{{$item->location}}</td>
+                                
                                 <td>
                                     <a href="{{url('admin/events/'.$item->id)}}" class="btn btn-primary" >Edit</a>
                                 </td>

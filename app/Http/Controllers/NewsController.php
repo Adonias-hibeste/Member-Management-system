@@ -22,13 +22,15 @@ class NewsController extends Controller
         
          $news = new News;
          $news->name = $data['name'];
-         $news->slug = $data['slug'];
+        
          $news->description = $data['description'];
-         $news->yt_iframe = $data['yt_iframe'] ?? '';
-         $news->meta_title = $data['meta_title'];
-         $news->meta_description = $data['meta_description'];
-         $news->meta_keyword = $data['meta_keyword'];
-         $news->status = $request->status==true? '1':'0';
+         if($request->hasfile('image')){
+            $file = $request->file('image');
+            $filename = time(). "." .$file->getClientOriginalExtension();
+           
+            $file->move('uploads/newsd', $filename);
+            $news->image = 'uploads/newsd/'.$filename;
+        }
         
          
          $news->save();
@@ -44,18 +46,20 @@ class NewsController extends Controller
    
     $news = News::find($news_id);
     $news->name = $data['name'];
-    $news->slug = $data['slug'];
+   
     $news->description = $data['description'];
-    $news->yt_iframe = $data['yt_iframe'] ?? '';
-    $news->meta_title = $data['meta_title'];
-    $news->meta_description = $data['meta_description'];
-    $news->meta_keyword = $data['meta_keyword'];
-    $news->status = $request->status==true? '1':'0';
-
+    if($request->hasfile('image')){
+       $file = $request->file('image');
+       $filename = time(). "." .$file->getClientOriginalExtension();
+      
+       $file->move('uploads/newsd', $filename);
+       $news->image = 'uploads/newsd/'.$filename;
+   }
+   
     
     $news->update();
 
-    return redirect()->route('admin.news')->with('message', 'Post updated successfully');
+    return redirect()->route('admin.news')->with('message', 'News updated successfully');
     }
     public function Destroy($news_id){
         $newsd=News::find($news_id);

@@ -27,29 +27,14 @@ class EventsFormRequest extends FormRequest
                 'required',
                'String',
             ],
-           'type'=>[
-                'required',
-               'String',
-           ],
+           
            'description'=>[
                 'required',
                
            ],
-           'event_date'=>[
-            'required',
-               'date',
-           ],
-           'event_time'=>[
-                'required',
-                new TimeValidation,
-           ],
-           'location'=>[
-                'required',
-               'String',
-           ],
-           'image_path'=>[
-                'nullable',
-               'String',
+           'image'=>[
+            'nullable',
+               'mimes:jpeg,jpg,png,gif',
            ],
           
         ];

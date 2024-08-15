@@ -120,33 +120,17 @@
                         <label for="name">Events Name</label>
                         <input type="text" name="name"value="{{$eventsd->name}}" class="form-control">
                     </div>
-                    <div class="form-group mb-3">
-                        <label for="type">type</label>
-                        <input type="text" name="type"value="{{$eventsd->type}}" class="form-control">
-                    </div>
+                  
                     <div class="form-group mb-3">
                         <label for="description">Description</label>
                         <textarea name="description" id="mysummernote" class="form-control" rows="4">{{ $eventsd->description }}</textarea>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="image_path">Image Link</label>
-                        <input type="file" name="image_path" value="{{$eventsd->image_path}}" class="form-control">
+                        <label> Upload Image</label>
+                        <input type="file" name="image"  class="form-control">
                     </div>
-
-                    <div class="form-group mb-3">
-    <label for="event_date">Event Date</label>
-    <input type="date" name="event_date"value="{{$eventsd->event_date}}"  class="form-control">
-                    </div>
-
-                    <div class="form-group mb-3">
-    <label for="event_time">Event Time</label>
-    <input type="time" name="event_time"value="{{$eventsd->event_time}}" class="form-control">
-             </div>
-             <div class="form-group mb-3">
-                        <label for="location">Location</label>
-                        <input type="text" name="location"value="{{$eventsd->location}}" class="form-control">
-                    </div>
-
+                
+                  
                     <button type="submit" class="btn btn-primary">update Events</button>
                 </form>
             </div>

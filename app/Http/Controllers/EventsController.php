@@ -23,13 +23,15 @@ class EventsController extends Controller
         
          $events = new Events;
          $events->name = $data['name'];
-         $events->type = $data['type'];
-         $events->description = $data['description'];
-         $events->image_path = $data['image_path'] ?? '';
-         $events->event_date = $data['event_date'];
-         $events->event_time = $data['event_time'];
-         $events->location = $data['location'];
         
+         $events->description = $data['description'];
+         if($request->hasfile('image')){
+            $file = $request->file('image');
+            $filename = time(). "." .$file->getClientOriginalExtension();
+           
+            $file->move('uploads/eventsd', $filename);
+            $events->image = 'uploads/eventsd/'.$filename;
+        }
          
          $events->save();
      
@@ -43,18 +45,20 @@ class EventsController extends Controller
         $data = $request -> validated();
    
     $events = Events::find($events_id);
-        $events->name = $data['name'];
-         $events->type = $data['type'];
-         $events->description = $data['description'];
-         $events->image_path = $data['image_path'] ?? '';
-         $events->event_date = $data['event_date'];
-         $events->event_time = $data['event_time'];
-         $events->location = $data['location'];
-        
+    $events->name = $data['name'];
+   
+    $events->description = $data['description'];
+    if($request->hasfile('image')){
+       $file = $request->file('image');
+       $filename = time(). "." .$file->getClientOriginalExtension();
+      
+       $file->move('uploads/eventsd', $filename);
+       $events->image = 'uploads/eventsd/'.$filename;
+   }
     
     $events->update();
 
-    return redirect()->route('admin.events')->with('message', 'Post updated successfully');
+    return redirect()->route('admin.events')->with('message', 'Event updated successfully');
     }
     public function Destroy($events_id){
         $eventsd=Events::find($events_id);

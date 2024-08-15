@@ -14,12 +14,10 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('type');
+       
             $table->text('description')->nullable();
-            $table->date('event_date');
-            $table->time('event_time');
-            $table->string('location');
-            $table->string('image_path')->nullable();
+           
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

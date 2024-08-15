@@ -14,13 +14,10 @@ return new class extends Migration
         Schema::create('news', function (Blueprint $table) {
             $table->id();
             $table->String('name');
-            $table->String('slug');
+           
             $table->mediumText('description');
-            $table->String('yt_iframe')->nullable();
-            $table->String('meta_title');
-            $table->mediumText('meta_description')->nullable();
-            $table->mediumText('meta_keyword')->nullable();
-            $table->tinyInteger('status')->default('0');
+            $table->String('image')->nullable();
+           
            
             $table->timestamps();
         });

@@ -26,34 +26,16 @@ class NewsFormRequest extends FormRequest
                 'required',
                'String',
             ],
-           'slug'=>[
-                'required',
-               'String',
-           ],
+          
            'description'=>[
                 'required',
                
            ],
-           'yt_iframe'=>[
+           'image'=>[
             'nullable',
-               'String',
+               'mimes:jpeg,jpg,png,gif',
            ],
-           'meta_title'=>[
-                'required',
-               'String',
-           ],
-           'meta_description'=>[
-                'nullable',
-               'String',
-           ],
-           'meta_keyword'=>[
-                'nullable',
-               'String',
-           ],
-           'status'=>[
-                'nullable',
-              
-           ],
+          
         ];
         return $rules;
     }
