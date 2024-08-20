@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\EventRegister;
 use Illuminate\Support\Facades\Auth;
+
 class UserController extends Controller
 {
     public function Userdashboard(){
-        return view ('user.userdashboard');
+        $event_registers = EventRegister::count();
+
+        return view ('user.userdashboard',compact('event_registers'));
     }
     public function UserLogout(Request $request){
         Auth::logout();
@@ -17,6 +21,4 @@ class UserController extends Controller
 
     return redirect('/admin/login');
      }
-
-
 }

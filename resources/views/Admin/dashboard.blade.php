@@ -15,14 +15,14 @@
             margin-right: 40px; /* Adjusted spacing */
         }
         .navbar-nav {
-            margin-left: auto; 
+            margin-left: auto;
         }
     </style>
 </head>
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <a class="navbar-brand ps-2" href="{{ url('admin/dashboard')}}">Member Management System</a>
-  
+
         <button class="btn btn-link btn-sm order-0 order-lg-0 ms-5" id="sidebarToggle"><i class="fas fa-bars"></i></button>
         <ul class="navbar-nav ms-auto ms-md-45 me-10 me-lg-5">
             <li class="nav-item dropdown">
@@ -46,9 +46,9 @@
                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                 Dashboard
             </a>
-            
+
             <div class="sb-sidenav-menu-heading">Manage</div>
-            
+
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseBlogPost" aria-expanded="false" aria-controls="collapseBlogPost">
                 <div class="sb-nav-link-icon">📝</div> <!-- Memo icon -->
                 Blog Post
@@ -60,7 +60,7 @@
                     <a class="nav-link" href="{{ url('/admin/post') }}">View Post</a>
                 </nav>
             </div>
-            
+
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNewsUpdates" aria-expanded="false" aria-controls="collapseNewsUpdates">
                 <div class="sb-nav-link-icon">📰</div> <!-- Newspaper icon -->
                 News and Updates
@@ -72,7 +72,7 @@
                     <a class="nav-link" href="{{ url('/admin/news') }}">View News</a>
                 </nav>
             </div>
-            
+
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseEvents" aria-expanded="false" aria-controls="collapseEvents">
                 <div class="sb-nav-link-icon">🎉</div> <!-- Party popper icon -->
                 Events
@@ -84,7 +84,7 @@
                     <a class="nav-link" href="{{ url('/admin/events') }}">View Events</a>
                 </nav>
             </div>
-            
+
             <a class="nav-link" href="{{ route('admin.registeredusers') }}">👤 View Users</a>
             <a class="nav-link" href="#!">💳 Payments</a>
         </div>
@@ -102,36 +102,47 @@
                     <div class="row">
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-primary text-white mb-4">
-                                <div class="card-body">Primary Card</div>
+                                <div class="card-body">Total Blogs
+                                    <h2>{{$post }}</h2>
+                                </div>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">View Details</a>
+                                    <a class="small text-white stretched-link" href="{{url('/admin/post')}}">View Details</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl-3 col-md-6">
-                            <div class="card bg-warning text-white mb-4">
-                                <div class="card-body">Warning Card</div>
+                            <div class="card bg-primary text-white mb-4">
+                                <div class="card-body">Total News and Updates
+                                    <h2>{{ $events}}</h2>
+                                </div>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">View Details</a>
+                                    <a class="small text-white stretched-link" href="{{url('/admin/news')}}">View Details</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                 </div>
                             </div>
                         </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card bg-primary text-white mb-4">
+                                <div class="card-body">Total Events
+                                    <h2>{{$news}}</h2>
+                                </div>
+                                <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <a class="small text-white stretched-link" href="{{url('/admin/events')}}">View Details</a>
+                                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-success text-white mb-4">
-                                <div class="card-body">Success Card</div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">View Details</a>
-                                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                <div class="card-body">Total Users
+                                    <h2>{{$admins}}</h2>
+
+
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card bg-danger text-white mb-4">
-                                <div class="card-body">Danger Card</div>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">View Details</a>
+                                    <a class="small text-white stretched-link" href="{{url('/admin/registeredusers')}}">View Details</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                 </div>
                             </div>

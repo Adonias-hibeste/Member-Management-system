@@ -17,24 +17,20 @@ class NewsController extends Controller
         return view('admin.createnews');
     }
     public function Store(NewsFormRequest $request){
-   
         $data = $request -> validated();
-        
          $news = new News;
          $news->name = $data['name'];
-        
          $news->description = $data['description'];
          if($request->hasfile('image')){
             $file = $request->file('image');
             $filename = time(). "." .$file->getClientOriginalExtension();
-           
             $file->move('uploads/newsd', $filename);
             $news->image = 'uploads/newsd/'.$filename;
         }
-        
-         
+
+
          $news->save();
-     
+
          return redirect()->route('admin.news')->with('message', 'Post added successfully');
      }
      public function Edit($news_id){
@@ -43,20 +39,20 @@ class NewsController extends Controller
     }
     public function Update(NewsFormRequest $request, $news_id){
         $data = $request -> validated();
-   
+
     $news = News::find($news_id);
     $news->name = $data['name'];
-   
+
     $news->description = $data['description'];
     if($request->hasfile('image')){
        $file = $request->file('image');
        $filename = time(). "." .$file->getClientOriginalExtension();
-      
+
        $file->move('uploads/newsd', $filename);
        $news->image = 'uploads/newsd/'.$filename;
    }
-   
-    
+
+
     $news->update();
 
     return redirect()->route('admin.news')->with('message', 'News updated successfully');

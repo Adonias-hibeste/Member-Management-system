@@ -87,7 +87,7 @@
             @endif
             <div class="card-header">
                <h4>Edit Profiles
-               <a href="{{ url('usere/profile')}}" class="btn btn-primary float-end" style="background-color: red; color: white;">BACK</a>
+               <a href="{{ url('user/profile')}}" class="btn btn-primary float-end" style="background-color: red; color: white;">BACK</a>
                 </h4>
             </div>
             <div class="card-body">

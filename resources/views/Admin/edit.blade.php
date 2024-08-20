@@ -22,7 +22,6 @@
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <a class="navbar-brand ps-2" href="{{ url('admin/dashboard')}}">Member Management System</a>
-
         <button class="btn btn-link btn-sm order-0 order-lg-0 ms-5" id="sidebarToggle"><i class="fas fa-bars"></i></button>
         <ul class="navbar-nav ms-auto ms-md-45 me-10 me-lg-5">
             <li class="nav-item dropdown">
@@ -60,7 +59,6 @@
                     <a class="nav-link" href="{{ url('/admin/post') }}">View Post</a>
                 </nav>
             </div>
-
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNewsUpdates" aria-expanded="false" aria-controls="collapseNewsUpdates">
                 <div class="sb-nav-link-icon">📰</div> <!-- Newspaper icon -->
                 News and Updates
@@ -72,7 +70,6 @@
                     <a class="nav-link" href="{{ url('/admin/news') }}">View News</a>
                 </nav>
             </div>
-
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseEvents" aria-expanded="false" aria-controls="collapseEvents">
                 <div class="sb-nav-link-icon">🎉</div> <!-- Party popper icon -->
                 Events
@@ -84,7 +81,6 @@
                     <a class="nav-link" href="{{ url('/admin/events') }}">View Events</a>
                 </nav>
             </div>
-
             <a class="nav-link" href="{{ route('admin.registeredusers') }}">👤 View Users</a>
             <a class="nav-link" href="#!">💳 Payments</a>
         </div>
@@ -120,7 +116,6 @@
                         <label for="name">Post Name</label>
                         <input type="text" name="name" value="{{$posts->name}}" class="form-control">
                     </div>
-
                     <div class="form-group mb-3">
                         <label for="description">Description</label>
                         <textarea name="description" class="form-control" rows="4">{{ $posts->description }}</textarea>

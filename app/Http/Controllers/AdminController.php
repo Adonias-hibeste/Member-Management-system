@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+
 use App\Models\Admin;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
     public function register(){
         return view ('Admin.register');
     }
-    
+
     public function registerPost(Request $request){
 
         $request->validate([
@@ -35,29 +37,31 @@ class AdminController extends Controller
     }
 
     public function loginPost(Request $request)
-{
-    // Validate the input
-    $request->validate([
-        'email' => 'required',
-        'password' => 'required',
-    ]);
+    {
 
-    // Get the credentials
-    $credentials = $request->only('email', 'password');
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required',
+        ]);
 
-    // Attempt to log in with the admin guard
-    if (Auth::guard('admin')->attempt($credentials)) {
-        // Redirect to the intended page or default to the root
-        if (auth('admin')->user()->is_admin== 1) {
-            return redirect()->route('admin.dashboard');
+
+        $credentials = $request->only('email', 'password');
+
+
+        if (Auth::guard('admin')->attempt($credentials)) {
+            $user = Auth::guard('admin')->user();
+
+            if ($user->is_admin == 1) {
+                return redirect()->intended('/admin/dashboard');
+            } else {
+                return redirect()->intended('/user/userdashboard');
+            }
         } else {
-            return redirect()->route('user.userdashboard');
+            return redirect()->route('admin.register')->with('status', 'Input proper email/password');
         }
     }
 
-    // Redirect back with an error message
-    return redirect()->route('admin.login');
 }
 
 
-}
+

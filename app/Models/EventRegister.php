@@ -10,11 +10,9 @@ class EventRegister extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'email', 'phone', 'event_id', 'message'
+        'name',
+        'email',
+        'phone',
+        'event_id',
     ];
-
-    public function event()
-    {
-        return $this->belongsTo(EventRegister::class);
-    }
 }

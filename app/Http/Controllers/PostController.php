@@ -18,7 +18,6 @@ public function Create(){
     return view('admin.createpost');
 }
 public function Store(PostFormRequest $request){
-
    $data = $request -> validated();
 
     $post = new Post;

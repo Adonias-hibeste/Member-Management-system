@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone');
             $table->foreignId('event_id')->constrained('events')->onDelete('cascade');
-            $table->text('message')->nullable();
+
             $table->timestamps();
         });
     }

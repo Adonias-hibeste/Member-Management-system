@@ -18,9 +18,7 @@ class EventsController extends Controller
         return view('admin.createevents');
     }
     public function Store(EventsFormRequest $request){
-
         $data = $request -> validated();
-
          $events = new Events;
          $events->name = $data['name'];
 
@@ -43,7 +41,6 @@ class EventsController extends Controller
     }
     public function Update(EventsFormRequest $request, $events_id){
         $data = $request -> validated();
-
     $events = Events::find($events_id);
     $events->name = $data['name'];
 
@@ -65,6 +62,10 @@ class EventsController extends Controller
         $eventsd->delete();
         return redirect()->route('admin.events')->with('message', 'Post Deleted successfully');
     }
-
+    public function getEvents()
+    {
+        $events = Events::select('id', 'name')->get();
+        return response()->json($events);
+    }
 
 }

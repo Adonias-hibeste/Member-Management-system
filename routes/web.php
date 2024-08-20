@@ -15,6 +15,8 @@ Route::get('/', function () {
 
 
 
+
+
     Route::get('/admin/register', [App\Http\Controllers\AdminController::class, 'register'])->name('admin.register');
     Route::post('/admin/register', [App\Http\Controllers\AdminController::class, 'registerPost'])->name('admin.registerPost');
     Route::get('/admin/login', [App\Http\Controllers\AdminController::class, 'login'])->name('admin.login');
@@ -23,8 +25,9 @@ Route::get('/', function () {
 
     Route::get('/admin/logout', [App\Http\Controllers\IsAdminController::class, 'AdminLogout'])->name('admin.logout');
 
+    Route::get('/admin/dashboard', [App\Http\Controllers\IsAdminController::class, 'Admindashboard'])->name('admin.dashboard')->middleware('admin');
 
-    Route::get('/admin/dashboard', [App\Http\Controllers\IsAdminController::class, 'Admindashboard'])->name('admin.dashboard');
+
 
 
 
@@ -64,13 +67,14 @@ Route::get('/', function () {
 
 
 
-    Route::get('/user/userdashboard', [App\Http\Controllers\UserController::class, 'Userdashboard'])->name('user.userdashboard');
+    Route::get('/user/userdashboard', [App\Http\Controllers\UserController::class, 'Userdashboard'])->name('user.userdashboard')->middleware('admin');
+
     Route::get('/user/logout', [App\Http\Controllers\UserController::class, 'UserLogout'])->name('user.logout');
 
 
     Route::get('/user/register', [App\Http\Controllers\MemberController::class, 'showRegistrationForm'])->name('user.register');
     Route::post('/user/register', [App\Http\Controllers\MemberController::class, 'register'])->name('user.register.submit');
-    // Route::get('/user/userdashboard', [App\Http\Controllers\MemberController::class, 'dashboard'])->name('user.userdashboard');
+
 
 
 
@@ -87,5 +91,7 @@ Route::get('/', function () {
 
     Route::get('/user/eventRegister', [App\Http\Controllers\EventRegisterController::class, 'showForm'])->name('user.eventRegister');
     Route::post('/user/eventRegister', [App\Http\Controllers\EventRegisterController::class, 'register'])->name('user.eventRegister.register');
+
+    Route::get('/admin/events-list', [App\Http\Controllers\EventsController::class, 'getEvents'])->name('admin.events.list');
 
 

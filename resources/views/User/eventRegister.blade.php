@@ -1,31 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
+    <title>Member Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-    <link href="{{ asset('admin/css/styles.css') }}" rel="stylesheet" />
+    <link href="{{asset('admin/css/styles.css')}}" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <title>Register for Event</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .navbar-brand {
-            margin-right: 40px;
-            /* Adjusted spacing */
+            margin-right: 40px; /* Adjusted spacing */
         }
-
         .navbar-nav {
             margin-left: auto;
         }
     </style>
-
 </head>
-
-<<body class="sb-nav-fixed">
+<body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <a class="navbar-brand ps-2" href="{{ url('user/userdashboard') }}">Member Management System</a>
 
@@ -44,6 +38,7 @@
     </nav>
     <div id="layoutSidenav">
     <div id="layoutSidenav_nav">
+
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
@@ -109,17 +104,12 @@
                             <label for="event" class="form-label">Select Event</label>
                             <select class="form-select" id="event" name="event" required>
                                 <option selected disabled>Choose an Event</option>
-                                @foreach ($events as $event)
-                                    <option value="{{ $event->id }}">{{ $event->name }}</option>
-                                @endforeach
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="message" class="form-label">Additional Message</label>
-                            <textarea class="form-control" id="message" name="message" rows="3">{{ old('message') }}</textarea>
-                        </div>
+
                         <button type="submit" class="btn btn-primary">Register</button>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -137,6 +127,22 @@
         </footer>
     </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/admin/events-list')
+                .then(response => response.json())
+                .then(events => {
+                    const eventSelect = document.getElementById('event');
+                    events.forEach(event => {
+                        const option = document.createElement('option');
+                        option.value = event.id;
+                        option.textContent = event.name;
+                        eventSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching events:', error));
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
     </script>
     <script src="{{ asset('admin/js/scripts.js') }}"></script>

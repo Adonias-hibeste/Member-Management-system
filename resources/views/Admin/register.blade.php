@@ -27,20 +27,20 @@
                                             <div class="row mb-3">
                                                 <div class="col-md-12">
                                                     <div class="form-floating mb-3 mb-md-0">
-                                                        <input class="form-control" name="name" id="inputFirstName" type="text" placeholder="Enter your name" />
-                                                        <label for="inputFirstName">Name</label>
+                                                        <input class="form-control" name="name"  type="text"  />
+                                                        <label for="name">Name</label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" name="email" id="inputEmail" type="email" placeholder="name@example.com" />
-                                                <label for="inputEmail">Email address</label>
+                                                <input class="form-control" name="email"  type="email"  />
+                                                <label for="email">Email address</label>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col-md-12">
                                                     <div class="form-floating mb-3 mb-md-0">
-                                                        <input class="form-control" name="password" id="inputPassword" type="password" placeholder="Create a password" />
-                                                        <label for="inputPassword">Password</label>
+                                                        <input class="form-control" name="password"  type="password"  />
+                                                        <label for="password">Password</label>
                                                     </div>
                                                 </div>
                                             </div>

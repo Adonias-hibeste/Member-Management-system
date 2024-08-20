@@ -91,7 +91,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Member Name</th>
-
+                            <th>Profile Pic</th>
                             <th>Edit</th>
                             <th>Delete</th>
 
@@ -102,6 +102,9 @@
                             <tr>
                                 <td>{{$item->id}}</td>
                                 <td>{{$item->name}}</td>
+                                <td>
+                                    <img src="{{asset('uploads/profiles/'.$item->image)}}" width='50px' height="50px" alt="Img">
+                                </td>
 
                                 <td>
                                     <a href="{{url('user/profile/'.$item->id)}}" class="btn btn-primary" >Edit</a>
