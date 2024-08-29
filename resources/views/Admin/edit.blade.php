@@ -188,7 +188,7 @@
                 </nav>
             </div>
             <a class="nav-link" href="{{ route('admin.registeredusers') }}">👤 View Users</a>
-            <a class="nav-link" href="{{ route('user.payment.form') }}">💳 Payments</a>
+            <a class="nav-link" href="{{ route('admin.payment.form') }}">💳 Payments</a>
         </div>
     </div>
 </nav>

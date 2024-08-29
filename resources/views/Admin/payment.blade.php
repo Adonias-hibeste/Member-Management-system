@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>View Users</title>
+    <title>Payment Form</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="{{ asset('admin/css/styles.css') }}" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -124,6 +124,19 @@
         #layoutSidenav_nav .sb-sidenav-menu-heading {
             font-weight: bold !important;
         }
+
+        .payment-form {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-form h2 {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 
@@ -138,7 +151,7 @@
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                     data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#!">Settings</a></li>
+                    <li><a class="dropdown-item" href="{{ route('admin.settings') }}">Settings</a></li>
                     {{-- <li><a class="dropdown-item" href="#!">Activity Log</a></li> --}}
                     <li>
                         <hr class="dropdown-divider" />
@@ -213,48 +226,74 @@
         </div>
         <div id="layoutSidenav_content">
             <main>
-                <div class="container-fluid px-4">
-                    <div class="card mt-4">
-                        <div class="card-header">
-                            <h4 class="d-flex justify-content-between align-items-center">
-                                View Users
-                            </h4>
-                        </div>
-                        <div class="card-body">
-                            @if (session('message'))
-                                <div class="alert alert-success">
-                                    {{ session('message') }}
+                <div class="container">
+                    <div class="payment-form">
+                        <h2>Payment Form</h2>
+
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @elseif(isset($success))
+                            <div class="alert alert-success">
+                                {{ $success }}
+                            </div>
+                            <a href="{{ route('admin.payment.generate-pdf', ['paymentId' => $paymentId]) }}"
+                                class="btn btn-primary mt-3">Download Receipt</a>
+                        @endif
+
+
+                        <form action="{{ route('admin.payment.process') }}" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="memberName" class="form-label">Member Name</label>
+                                <input type="text" class="form-control" id="memberName" name="memberName"
+                                    required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="membershipType" class="form-label">Membership Type</label>
+                                <select class="form-select" id="membershipType" name="membershipType" required>
+                                    <option selected disabled>Choose Membership Type</option>
+                                    <option value="basic">Basic</option>
+                                    <option value="premium">Premium</option>
+                                    <option value="vip">VIP</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="paymentMethod" class="form-label">Payment Method</label>
+                                <select class="form-select" id="paymentMethod" name="paymentMethod" required>
+                                    <option selected disabled>Select Payment Method</option>
+                                    <option value="telebirr">Telebirr</option>
+                                    <option value="m-pesa">M-Pesa</option>
+                                    <option value="bank_transfer">Bank Transfer</option>
+                                </select>
+                            </div>
+                            <div id="mobileMoneyDetails" style="display:none;">
+                                <div class="mb-3">
+                                    <label for="phoneNumber" class="form-label">Phone Number</label>
+                                    <input type="text" class="form-control" id="phoneNumber" name="phone_number"
+                                        placeholder="Enter your mobile number">
                                 </div>
-                            @endif
-                            <table class="table table-bordered table-hover">
-                                <thead style="background-color: #343a40; color: white;">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>User Name</th>
-                                        <th>Email</th>
-                                        <th>Role_as</th>
-                                        <th>Edit</th>
-
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($users as $item)
-                                        <tr>
-                                            <td>{{ $item->id }}</td>
-                                            <td>{{ $item->name }}</td>
-                                            <td>{{ $item->name }}</td>
-                                            <td>{{ $item->is_admin == '1' ? 'Admin' : 'User' }}</td>
-                                            <td>
-                                                <a href="{{ url('admin/registeredusers/' . $item->id) }}"
-                                                    class="btn btn-primary">Edit</a>
-                                            </td>
-
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                            </div>
+                            <div id="bankTransferDetails" style="display:none;">
+                                <div class="mb-3">
+                                    <label for="bankName" class="form-label">Bank Name</label>
+                                    <input type="text" class="form-control" id="bankName" name="bank_name"
+                                        placeholder="Enter your bank name">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="accountNumber" class="form-label">Account Number</label>
+                                    <input type="text" class="form-control" id="accountNumber"
+                                        name="account_number" placeholder="Enter your account number">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="amount" class="form-label">Amount to Pay</label>
+                                <input type="number" class="form-control" id="amount" name="amount"
+                                    placeholder="Enter amount" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Proceed to Pay</button>
+                        </form>
                     </div>
                 </div>
             </main>
@@ -275,15 +314,30 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
     </script>
-    <script src="{{ asset('admin/js/scripts.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
-        crossorigin="anonymous"></script>
+    <script src="{{ asset('admin/js/scripts.js') }}">
+        < /sc> <
+        script src = "https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+        crossorigin = "anonymous" >
+    </script>
     <script src="{{ asset('admin/js/datatables-simple-demo.js') }}"></script>
     <script>
         document.getElementById('sidebarToggle').addEventListener('click', function() {
             document.getElementById('layoutSidenav_nav').classList.toggle('sb-sidenav-toggled');
         });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.getElementById('paymentMethod').addEventListener('change', function() {
+            var method = this.value;
+            document.getElementById('mobileMoneyDetails').style.display = (method === 'telebirr' || method ===
+                'm-pesa') ? 'block' : 'none';
+            document.getElementById('bankTransferDetails').style.display = (method === 'bank_transfer') ? 'block' :
+                'none';
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

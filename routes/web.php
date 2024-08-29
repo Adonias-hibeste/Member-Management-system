@@ -8,7 +8,8 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\AdminForgotPasswordController;
 use App\Http\Controllers\SettingController;
-
+use App\Http\Controllers\AdminPaymentController;
+use App\Http\Controllers\AdminPDFController;
 Route::get('/', function () {
     return redirect()->route('admin.login');
 });
@@ -60,7 +61,10 @@ Route::get('/', function () {
     Route::get('/admin/settings', [App\Http\Controllers\SettingController::class, 'index'])->name('admin.settings');
     Route::post('/admin/settings', [App\Http\Controllers\SettingController::class, 'savedata'])->name('admin.settings.addsettings');
 
-
+    
+    Route::get('/admin/payment', [App\Http\Controllers\AdminPaymentController::class, 'showPaymentForm'])->name('admin.payment.form');
+    Route::post('/admin/payment/process', [App\Http\Controllers\AdminPaymentController::class, 'processPayment'])->name('admin.payment.process');
+    Route::get('/admin/generate-pdf/{paymentId}', [App\Http\Controllers\AdminPDFController::class, 'generatePdf'])->name('admin.payment.generate-pdf');
 
 
     Route::get('/user/userdashboard', [App\Http\Controllers\UserController::class, 'Userdashboard'])->name('user.userdashboard')->middleware('admin');
