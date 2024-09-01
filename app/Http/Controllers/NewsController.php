@@ -62,4 +62,21 @@ class NewsController extends Controller
         $newsd->delete();
         return redirect()->route('admin.news')->with('message', 'Post Deleted successfully');
     }
+    public function index1()
+    {
+        $newsd = News::all();
+        foreach ($newsd as $news) {
+            // Ensure the image URL is constructed correctly
+            $news->image = asset('uploads/newsd/' . basename($news->image));
+        }
+        return $newsd;
+    }
+
+    public function show1($id)
+    {
+        $news = News::find($id);
+        // Ensure the image URL is constructed correctly
+        $news->image = asset('uploads/newsd/' . basename($news->image));
+        return $news;
+    }
 }

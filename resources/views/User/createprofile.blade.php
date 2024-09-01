@@ -125,25 +125,27 @@
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control"  name="email"
-                               >
-                    </div>
-                    <div class="form-group mb-3">
                         <label for="phoneNumber" class="form-label">Phone Number</label>
                         <input type="tel" class="form-control"  name="phone_number"
                               ">
                     </div>
+                    <div class="form-group mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control"  name="email"
+                               >
+                               <div class="form-group mb-3">
+                                <label for="password" class="form-label"> Password </label>
+                                <input type="password" class="form-control" name="password"
+                                      >
+                            </div>
+                    </div>
+
 
                     <div class="form-group mb-3">
                         <label> Upload profile picture</label>
                         <input type="file" name="image"  class="form-control">
                     </div>
-                    <div class="form-group mb-3">
-                        <label for="password" class="form-label"> Password </label>
-                        <input type="password" class="form-control" name="password"
-                              >
-                    </div>
+
                     <h4 class="form-title">Type Of Membership</h4>
                     <div class="membership-options">
                         <div class="form-check">

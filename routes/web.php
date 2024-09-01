@@ -2,10 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\MemberController;
 
+
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\EventRegisterController;
+
+
+
 
 
 Route::get('/', function () {
@@ -84,6 +88,10 @@ Route::get('/', function () {
     Route::get('/user/profile/{profile_id}', [App\Http\Controllers\MemberController::class, 'Edit'])->name('user.edit');
     Route::put('/user/updateprofile/{profile_id}', [App\Http\Controllers\MemberController::class, 'Update']);
     Route::get('user/deleteprofile/{profile_id}', [App\Http\Controllers\MemberController::class, 'Destroy']);
+
+
+
+
 
 
     Route::get('/payment', [App\Http\Controllers\PaymentController::class, 'showPaymentForm'])->name('user.payment');

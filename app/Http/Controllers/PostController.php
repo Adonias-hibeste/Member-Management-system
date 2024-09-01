@@ -67,5 +67,24 @@ public function Store(PostFormRequest $request){
         $posts->delete();
         return redirect()->route('admin.post')->with('message', 'Post Deleted successfully');
     }
+    public function index()
+    {
+        $posts = Post::all();
+        foreach ($posts as $post) {
+            // Ensure the image URL is constructed correctly
+            $post->image = asset('uploads/posts/' . basename($post->image));
+        }
+        return $posts;
+    }
+
+    public function show($id)
+    {
+        $post = Post::find($id);
+        // Ensure the image URL is constructed correctly
+        $post->image = asset('uploads/posts/' . basename($post->image));
+        return $post;
+    }
 
 }
+
+

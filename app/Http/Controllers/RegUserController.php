@@ -3,7 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Profile;
+
 use Illuminate\Http\Request;
+use App\Http\Requests\LoginRequest;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\ProfileFormRequest;
+use Illuminate\Support\Facades\Validator;
 
 class RegUserController extends Controller
 {
@@ -20,11 +28,13 @@ class RegUserController extends Controller
         if($user)
         {
             $user->is_admin=$request->is_admin;
-           
+
             $user->update();
             return redirect()->route('admin.registeredusers')->with('message','updated successfully');
         }
         return redirect()->route('admin.registeredusers')->with('message','no user found');
     }
+
+
 
 }

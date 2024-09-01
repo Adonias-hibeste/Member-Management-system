@@ -67,5 +67,26 @@ class EventsController extends Controller
         $events = Events::select('id', 'name')->get();
         return response()->json($events);
     }
+    public function index2()
+    {
+        $eventsd = Events::all();
+        foreach ($eventsd as $events) {
+            // Ensure the image URL is constructed correctly
+            $events->image = asset('uploads/eventsd/' . basename($events->image));
+        }
+        return $eventsd;
+    }
+
+    public function show2($id)
+    {
+        $events = Events::find($id);
+        // Ensure the image URL is constructed correctly
+        $events->image = asset('uploads/eventsd/' . basename($events->image));
+        return $events;
+    }
+    public function index()
+    {
+        return Events::all();
+    }
 
 }

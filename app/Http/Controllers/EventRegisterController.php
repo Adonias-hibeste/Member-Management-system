@@ -37,4 +37,17 @@ class EventRegisterController extends Controller
 
         return redirect()->back()->with('success', 'You have successfully registered for the event!');
     }
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'phone' => 'required|string|max:20',
+            'event_id' => 'required|exists:events,id',
+        ]);
+
+        EventRegister::create($validated);
+
+        return response()->json(['message' => 'Registration successful'], 201);
+    }
 }

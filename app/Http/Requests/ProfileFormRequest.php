@@ -2,8 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 class ProfileFormRequest extends FormRequest
 {
     /**
@@ -21,59 +24,43 @@ class ProfileFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules= [
-            'name'=>[
+        return [
+            'name' => [
                 'required',
-               'String',
+                'string',
             ],
-
-           'full_address'=>[
+            'full_address' => [
                 'required',
-
-           ],
-           'dob'=>[
-            'required',
-
-       ],
-           'place_of_birth'=>[
-            'required',
-
-       ],
-           'image'=>[
-            'nullable',
-               'mimes:jpeg,jpg,png,gif',
-           ],
-
-           'nationality'=>[
-            'required',
-
-       ],
-
-
-
-
-   'gender'=>[
-    'required',
-
-],
-'email'=>[
-    'required',
-
-],
-
-  'phone_number'=>[
-    'required',
-
-],
-'password'=>[
-    'required',
-
-],
-'membership_type'=>[
-    'required',
-
-],
+            ],
+            'dob' => [
+                'required',
+            ],
+            'place_of_birth' => [
+                'required',
+            ],
+            'image' => [
+                'required',
+                'mimes:jpeg,jpg,png,gif',
+            ],
+            'nationality' => [
+                'required',
+            ],
+            'gender' => [
+                'required',
+            ],
+            'email' => [
+                'required',
+            ],
+            'phone_number' => [
+                'required',
+            ],
+            'password' => [
+                'required',
+            ],
+            'membership_type' => [
+                'required',
+            ],
         ];
-        return $rules;
     }
-}
+
+  }
