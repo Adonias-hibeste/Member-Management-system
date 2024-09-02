@@ -20,7 +20,7 @@ public function Create(){
 }
 public function Store(ProfileFormRequest $request){
 
-   $data = $request -> validated();
+    $data = $request -> validated();
 
     $profile = new Profile;
     $profile->name = $data['name'];

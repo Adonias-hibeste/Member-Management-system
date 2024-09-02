@@ -69,3 +69,4 @@ public function Store(PostFormRequest $request){
     }
 
 }
+
