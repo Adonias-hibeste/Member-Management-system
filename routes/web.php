@@ -2,37 +2,31 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-
-
 use App\Http\Controllers\MemberController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\EventRegisterController;
-
-
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PDFController;
+use App\Http\Controllers\AdminForgotPasswordController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\AdminPaymentController;
+use App\Http\Controllers\AdminPDFController;
 
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('admin.login');
 });
-
-
-
-
-
 
     Route::get('/admin/register', [App\Http\Controllers\AdminController::class, 'register'])->name('admin.register');
     Route::post('/admin/register', [App\Http\Controllers\AdminController::class, 'registerPost'])->name('admin.registerPost');
     Route::get('/admin/login', [App\Http\Controllers\AdminController::class, 'login'])->name('admin.login');
     Route::post('/admin/login', [App\Http\Controllers\AdminController::class, 'loginPost'])->name('admin.loginPost');
-
+    Route::get('/admin/forgot', [App\Http\Controllers\AdminForgotPasswordController::class, 'showForgotPasswordForm'])->name('admin.forgot');
+    Route::post('/admin/forgot', [AdminForgotPasswordController::class, 'sendResetLink'])->name('admin.sendResetLink');
 
     Route::get('/admin/logout', [App\Http\Controllers\IsAdminController::class, 'AdminLogout'])->name('admin.logout');
 
     Route::get('/admin/dashboard', [App\Http\Controllers\IsAdminController::class, 'Admindashboard'])->name('admin.dashboard')->middleware('admin');
-
-
-
 
 
     Route::get('/admin/post', [App\Http\Controllers\PostController::class, 'Post'])->name('admin.post');
@@ -64,11 +58,13 @@ Route::get('/', function () {
     Route::get('/admin/registeredusers/{user_id}', [App\Http\Controllers\RegUserController::class, 'EditUser'])->name('admin.edituser');
     Route::put('/admin/updateuser/{user_id}', [App\Http\Controllers\RegUserController::class, 'Update']);
 
+    Route::get('/admin/settings', [App\Http\Controllers\SettingController::class, 'index'])->name('admin.settings');
+    Route::post('/admin/settings', [App\Http\Controllers\SettingController::class, 'savedata'])->name('admin.settings.addsettings');
 
 
-
-
-
+    Route::get('/admin/payment', [App\Http\Controllers\AdminPaymentController::class, 'showPaymentForm'])->name('admin.payment.form');
+    Route::post('/admin/payment/process', [App\Http\Controllers\AdminPaymentController::class, 'processPayment'])->name('admin.payment.process');
+    Route::get('/admin/generate-pdf/{paymentId}', [App\Http\Controllers\AdminPDFController::class, 'generatePdf'])->name('admin.payment.generate-pdf');
 
 
     Route::get('/user/userdashboard', [App\Http\Controllers\UserController::class, 'Userdashboard'])->name('user.userdashboard')->middleware('admin');
@@ -90,12 +86,10 @@ Route::get('/', function () {
     Route::get('user/deleteprofile/{profile_id}', [App\Http\Controllers\MemberController::class, 'Destroy']);
 
 
+    Route::get('/user/payment', [PaymentController::class, 'showPaymentForm'])->name('user.payment.form');
+    Route::post('/user/payment/process', [PaymentController::class, 'processPayment'])->name('user.payment.process');
+    Route::get('/user/generate-pdf/{paymentId}', [PDFController::class, 'generatePdf'])->name('user.payment.generate-pdf');
 
-
-
-
-    Route::get('/payment', [App\Http\Controllers\PaymentController::class, 'showPaymentForm'])->name('user.payment');
-    Route::post('/payment', [App\Http\Controllers\PaymentController::class, 'processPayment'])->name('user.payment.process');
 
     Route::get('/user/eventRegister', [App\Http\Controllers\EventRegisterController::class, 'showForm'])->name('user.eventRegister');
     Route::post('/user/eventRegister', [App\Http\Controllers\EventRegisterController::class, 'register'])->name('user.eventRegister.register');

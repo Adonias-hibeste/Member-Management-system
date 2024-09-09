@@ -43,10 +43,6 @@ return [
         'driver' => 'session',
         'provider' => 'admins',
     ],
-    'api' => [
-        'driver' => 'sanctum',
-        'provider' => 'profiles',
-    ],
 ],
 
 'providers' => [
@@ -57,10 +53,6 @@ return [
     'admins' => [
         'driver' => 'eloquent',
         'model' => App\Models\Admin::class,
-    ],
-    'profiles' => [
-        'driver' => 'eloquent',
-        'model' => App\Models\Profile::class,
     ],
 ],
 

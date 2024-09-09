@@ -16,7 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\IsAdmin::class, // Registering the IsAdmin middleware
             'auth' => Authenticate::class, // Registering the Authenticate middleware
-            'auth:api' => EnsureFrontendRequestsAreStateful::class, // Registering the Sanctum middleware
+            'auth:api' => EnsureFrontendRequestsAreStateful::class,
+
+// Registering the Sanctum middleware
         ]);
 
         // Adding Sanctum middleware

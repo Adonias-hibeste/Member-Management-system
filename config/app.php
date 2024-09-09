@@ -122,5 +122,12 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+    'providers' => [
+        // Other service providers...
+        App\Providers\AppServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
+    ],
+
+
 
 ];

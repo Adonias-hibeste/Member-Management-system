@@ -18,11 +18,9 @@ return new class extends Migration
             $table->String('image')->nullable();
             $table->timestamps();
         });
+
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('post');
