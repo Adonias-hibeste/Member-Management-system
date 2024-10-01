@@ -16,11 +16,11 @@ class IsAdminController extends Controller
         $post=Post::count();
         $events=Events::count();
         $news=News::count();
-        $admins=Admin::where('is_admin','0')->count();
+        $admins= Admin::role('admin')->count();
         return view ('admin.dashboard',compact('post','events','news','admins'));
     }
     public function AdminLogout(Request $request){
-        Auth::logout();
+     Auth::logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();
 

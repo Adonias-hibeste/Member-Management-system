@@ -24,16 +24,36 @@
                                     <h3 class="text-center font-weight-light my-4">Login</h3>
                                 </div>
                                 <div class="card-body">
-                                    @if (session('status'))
+                                    {{-- @if (session('status'))
                                         <div class="alert alert-success" role="alert">
                                             {{ session('status') }}
                                         </div>
+                                    @endif --}}
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
                                     @endif
-                                    <form action="{{ route('admin.login') }}" method="POST">
+
+
+
+
+                                    {{-- {{ route('admin.login') }} --}}
+
+                                    <form action="{{ route('admin.loginPost') }}" method="POST">
                                         @csrf
                                         <div class="form-floating mb-3">
                                             <input class="form-control" name="email" type="email" />
                                             <label for="email">Email address</label>
+                                            @error('email')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         </div>
                                         <div class="form-floating mb-3">
                                             <input class="form-control" name="password" type="password" />
@@ -60,20 +80,21 @@
                     </div>
                 </div>
             </main>
-        </div <div id="layoutAuthentication_footer">
-        <footer class="py-4 bg-light mt-auto">
-            <div class="container-fluid px-4">
-                <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                    <div>
-                        <a href="#">Privacy Policy</a>
-                        &middot;
-                        <a href="#">Terms &amp; Conditions</a>
+        </div>
+        <div id="layoutAuthentication_footer">
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </footer>
-    </div>
+            </footer>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
     </script>

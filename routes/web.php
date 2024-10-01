@@ -10,8 +10,11 @@ use App\Http\Controllers\AdminForgotPasswordController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\AdminPaymentController;
 use App\Http\Controllers\AdminPDFController;
-
-
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CatagoryController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
+use App\Models\Catagory;
 
 Route::get('/', function () {
     return redirect()->route('admin.login');
@@ -67,7 +70,7 @@ Route::get('/', function () {
     Route::get('/admin/generate-pdf/{paymentId}', [App\Http\Controllers\AdminPDFController::class, 'generatePdf'])->name('admin.payment.generate-pdf');
 
 
-    Route::get('/user/userdashboard', [App\Http\Controllers\UserController::class, 'Userdashboard'])->name('user.userdashboard')->middleware('admin');
+    Route::get('/user/userdashboard', [App\Http\Controllers\UserController::class, 'Userdashboard'])->name('user.userdashboard');//->middleware('admin')
 
     Route::get('/user/logout', [App\Http\Controllers\UserController::class, 'UserLogout'])->name('user.logout');
 
@@ -96,4 +99,23 @@ Route::get('/', function () {
 
     Route::get('/admin/events-list', [App\Http\Controllers\EventsController::class, 'getEvents'])->name('admin.events.list');
 
+    Route::get('/admin/catagories',[CatagoryController::class,'index'])->name('admin.catagories');
+    Route::get('/admin/catagories/addCatagory',[CatagoryController::class,'create'])->name('admin.catagory.create');
+    Route::post('/admin/catagory/create',[CatagoryController::class,'store'])->name('admin.catagory.store');
 
+    Route::get('/admin/productlist',[ProductController::class,'index'])->name('admin.viewProducts');
+    Route::get('/admin/products/{id}',[ProductController::class,'show'])->name('admin.viewProducts.details');
+
+    Route::get('/admin/product/addProducts',[ProductController::class,'create'])->name('admin.createProduct');
+    Route::post('/admin/product/store',[ProductController::class,'store'])->name('admin.product.store');
+
+
+    Route::get('/admin/orders',[OrderController::class,'index'])->name('admin.order.view');
+    Route::get('/admin/make_order',[OrderController::class,'make_order'])->name('admin.makeOrder');
+
+    Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/cart', [CartController::class, 'show'])->name('admin.cart.show');
+    Route::post('/admin/cart/add', [CartController::class, 'add'])->name('admin.cart.add');
+    Route::post('/admin/cart/update', [CartController::class, 'update'])->name('admin.cart.update');
+    Route::post('/admin/cart/remove', [CartController::class, 'remove'])->name('admin.cart.remove');
+    });

@@ -9,14 +9,22 @@ return new class extends Migration {
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->integer('is_admin')->default(0);
+            $table->rememberToken();
             $table->timestamps();
         });
+
+
     }
 
-    public function down(): void {
-        Schema::dropIfExists('admins');
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists(table: 'admins');
+
     }
 };

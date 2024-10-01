@@ -14,16 +14,12 @@ class Profile extends Model
     protected $table='profile';
     protected $fillable=[
 
-        'name',
-        'image',
-    'place_of_birth',
-    'dob',
-    'full_address',
-    'nationality',
-
+    'first_name',
+    'last_name',
+    'image',
+    'age',
+    'address',
     'gender',
-    'email',
     'phone_number',
-    'password',
-    'membership_type',];
+    ];
 }
