@@ -61,9 +61,9 @@
                                                 </div>
                                             @endif
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" name="first_name" type="text"
+                                                <input class="form-control" name="full_name" type="text"
                                                     value="{{ old('full_name') }}" required />
-                                                <label for="first_name">Full Name</label>
+                                                <label for="full_name">Full Name</label>
                                             </div>
 
                                             <div class="form-floating mb-3">
@@ -111,7 +111,9 @@
                                         </div>
                                     </form>
 
-
+                                    <div class="card-footer text-center py-3">
+                                        <div class="small"><a href="{{ route('admin.login') }}"> Sign in </a></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

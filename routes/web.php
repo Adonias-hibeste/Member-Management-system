@@ -117,6 +117,9 @@ Route::get('/', function () {
 
 
     Route::get('/admin/orders',[OrderController::class,'index'])->name('admin.order.view');
+    Route::put('/admin/orders/{id}', [OrderController::class, 'update'])->name('admin.orders.update');
+    Route::get('/admin/orders/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
+    Route::get('/admin/orders/{id}/delete', [OrderController::class, 'destroy'])->name('admin.orders.delete');
 
 
 
@@ -124,6 +127,6 @@ Route::get('/', function () {
     Route::post('/admin/cart/add', [CartController::class, 'add'])->name('admin.cart.add');
     Route::post('/admin/cart/update', [CartController::class, 'update'])->name('admin.cart.update');
     Route::post('/admin/cart/remove', [CartController::class, 'remove'])->name('admin.cart.remove');
-    Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+    Route::post('/admin/checkout', [OrderController::class, 'checkout'])->name('checkout');
 
 

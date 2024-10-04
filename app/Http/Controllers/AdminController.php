@@ -27,7 +27,7 @@ class AdminController extends Controller
                 'address' => 'required|string',
                 'gender' => 'required|in:male,female',
                 'phone_number' => 'required',
-                'user_name' => 'required|string|max:255|unique:users,User_name',
+                'user_name' => 'required|string|max:255|unique:profiles,user_name',
                 'email' => 'required|email|max:255|unique:users,email',
                 'password' => 'required|string|min:8',
 
