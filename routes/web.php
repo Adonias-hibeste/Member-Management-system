@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MembershipController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MemberController;
@@ -96,8 +97,13 @@ Route::get('/', function () {
 
     Route::get('/user/eventRegister', [App\Http\Controllers\EventRegisterController::class, 'showForm'])->name('user.eventRegister');
     Route::post('/user/eventRegister', [App\Http\Controllers\EventRegisterController::class, 'register'])->name('user.eventRegister.register');
+    Route::get('/user/make_order',[OrderController::class,'make_order'])->name('user.makeOrder');
 
     Route::get('/admin/events-list', [App\Http\Controllers\EventsController::class, 'getEvents'])->name('admin.events.list');
+
+    Route::get('/admin/membership',[MembershipController::class,'index'])->name('admin.membership.index');
+    Route::get('/admin/membership/create',[MembershipController::class,'create'])->name('admin.membership.create');
+    Route::post('/admin/membership/store',[MembershipController::class,'store'])->name('admin.membership.store');
 
     Route::get('/admin/catagories',[CatagoryController::class,'index'])->name('admin.catagories');
     Route::get('/admin/catagories/addCatagory',[CatagoryController::class,'create'])->name('admin.catagory.create');
@@ -111,11 +117,13 @@ Route::get('/', function () {
 
 
     Route::get('/admin/orders',[OrderController::class,'index'])->name('admin.order.view');
-    Route::get('/admin/make_order',[OrderController::class,'make_order'])->name('admin.makeOrder');
 
-    Route::middleware(['auth'])->group(function () {
+
+
     Route::get('/admin/cart', [CartController::class, 'show'])->name('admin.cart.show');
     Route::post('/admin/cart/add', [CartController::class, 'add'])->name('admin.cart.add');
     Route::post('/admin/cart/update', [CartController::class, 'update'])->name('admin.cart.update');
     Route::post('/admin/cart/remove', [CartController::class, 'remove'])->name('admin.cart.remove');
-    });
+    Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+
+

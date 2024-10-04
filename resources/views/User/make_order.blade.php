@@ -1,4 +1,4 @@
-@extends('Admin.layout.layout')
+@extends('User.Userlayout.layout')
 @section('content')
     <div class="container">
         <div class="row">
@@ -47,7 +47,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <a href="#" class="btn btn-primary">Checkout</a>
+                        <button class="btn btn-success" id="checkoutButton">Checkout</button>
                     </div>
                 </div>
             </div>
@@ -133,6 +133,7 @@
         }
 
         // Update cart item quantity
+        // Update cart item quantity
         document.getElementById('cartItemsContainer').addEventListener('input', function(e) {
             if (e.target.classList.contains('item-quantity')) {
                 const productId = e.target.dataset.id;
@@ -151,11 +152,16 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        loadCart(); // Reload cart to reflect changes
+                        if (data.message) {
+                            loadCart(); // Reload cart to reflect changes
+                        } else {
+                            alert(data.error);
+                        }
                     })
                     .catch(error => alert('Error updating quantity: ' + error.message));
             }
         });
+
 
         // Remove item functionality
         document.getElementById('cartItemsContainer').addEventListener('click', function(e) {
@@ -179,6 +185,31 @@
                     })
                     .catch(error => alert('Error removing item: ' + error.message));
             }
+        });
+    </script>
+
+
+
+    <script>
+        document.getElementById('checkoutButton').addEventListener('click', function() {
+            fetch('{{ route('checkout') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert('Order placed successfully!');
+                        window.location.reload(); // Reload page or redirect as necessary
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => alert('Checkout error: ' + error.message));
         });
     </script>
 

@@ -26,9 +26,10 @@ class CartController extends Controller
             ];
         });
 
-        $cartItems = Cart::where('user_id', Auth::id())->get();
-    return response()->json(['cart' => $cartItems]);
+        // Return the correct mapped cart items
+        return response()->json(['cart' => $cartItems]);
     }
+
 
     // Add a product to the cart
     public function add(Request $request)
@@ -79,18 +80,21 @@ class CartController extends Controller
     // Update the quantity of a cart item
     public function update(Request $request)
     {
-        $userId = Auth::id(); // Ensure user is authenticated
+        $userId = Auth::id();
         $productId = $request->input('product_id');
         $newQuantity = $request->input('quantity');
 
+        // Ensure the cart item exists and the new quantity is valid
         $cartItem = Cart::where('user_id', $userId)->where('product_id', $productId)->first();
 
-        if ($cartItem && $newQuantity > 0) {
+        if ($cartItem && $newQuantity > 0 && $newQuantity <= $cartItem->product->quantity) {
             $cartItem->update(['quantity' => $newQuantity]);
+            return response()->json(['message' => 'Cart updated successfully']);
         }
 
-        return response()->json(['message' => 'Cart updated']);
+        return response()->json(['error' => 'Invalid quantity or product not found'], 400);
     }
+
 
     // Remove a product from the cart
     public function remove(Request $request)

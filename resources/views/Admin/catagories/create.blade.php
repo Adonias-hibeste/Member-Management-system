@@ -1,4 +1,4 @@
-@extends('Admin.layout.layout')
+@extends('Admin.Adminlayout.layout')
 @section('content')
     <div class="card mb-4">
         @if ($errors->any())

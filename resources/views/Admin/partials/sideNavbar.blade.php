@@ -66,10 +66,8 @@
                 <a class="nav-link" href="{{ route('admin.order.view') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>orders
                 </a>
-
-
-                <a class="nav-link" href="{{ route('admin.makeOrder') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>make orders
+                <a class="nav-link" href="{{ route('admin.membership.index') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>membership
                 </a>
 
             </div>

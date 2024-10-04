@@ -11,15 +11,18 @@ class Profile extends Model
 
     use HasFactory;
     use HasApiTokens, Notifiable;
-    protected $table='profile';
+    protected $table='profiles';
     protected $fillable=[
-
-    'first_name',
-    'last_name',
+    'user_id',
+    'user_name',
     'image',
     'age',
     'address',
     'gender',
     'phone_number',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

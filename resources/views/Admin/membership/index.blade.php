@@ -4,8 +4,8 @@
         <div class="card mt-4">
             <div class="card-header">
                 <h4 class="d-flex justify-content-between align-items-center">
-                    Catagories
-                    <a href="{{ route('admin.catagory.create') }}" class="btn btn-primary btn-sm">Add catagory</a>
+                    Membership
+                    <a href="{{ route('admin.membership.create') }}" class="btn btn-primary btn-sm">Add Membership</a>
                 </h4>
             </div>
             <div class="card-body">
@@ -18,19 +18,21 @@
                     <thead style="background-color: #343a40; color: white;">
                         <tr>
                             <th>ID</th>
-                            <th>catagory Name</th>
-                            <th>Description</th>
+                            <th>MemberShip_Type</th>
+                            <th>Duration</th>
+                            <th>Price</th>
 
                             <th>Action</th>
 
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($catagories as $catagory)
+                        @foreach ($memberships as $membership)
                             <tr>
-                                <td>{{ $catagory->id }}</td>
-                                <td>{{ $catagory->name }}</td>
-                                <td>{{ $catagory->description }}</td>
+                                <td>{{ $membership->id }}</td>
+                                <td>{{ $membership->name }}</td>
+                                <td>{{ $membership->duration }}</td>
+                                <td>{{ $membership->price }}</td>
 
 
                                 <td>

@@ -121,6 +121,9 @@ public function Store(ProfileFormRequest $request){
             'token' => $token,
         ], 201);
     }
+
+
+    
     public function Registerapp(Request $request)
 {
 
