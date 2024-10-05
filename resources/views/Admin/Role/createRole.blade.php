@@ -34,8 +34,8 @@
                             <label for="permission-{{ $permission->id }}"
                                 class="form-check-label">{{ $permission->name }}</label>
                         </div>
+                    @endforeach
                 </div>
-                @endforeach
         </div>
 
 
