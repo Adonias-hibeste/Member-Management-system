@@ -15,6 +15,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatagoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RoleController;
 use App\Models\Catagory;
 
 Route::get('/', function () {
@@ -59,8 +60,10 @@ Route::get('/', function () {
     Route::get('admin/deleteevents/{events_id}', [App\Http\Controllers\EventsController::class, 'Destroy']);
 
     Route::get('/admin/registeredusers', [App\Http\Controllers\RegUserController::class, 'Users'])->name('admin.registeredusers');
-    Route::get('/admin/registeredusers/{user_id}', [App\Http\Controllers\RegUserController::class, 'EditUser'])->name('admin.edituser');
+    Route::get('/admin/registeredusers/{user_id}', [App\Http\Controllers\RegUserController::class, 'EditUser'])->name('admin.edituser');//is it nessary for the admin to edit users info
     Route::put('/admin/updateuser/{user_id}', [App\Http\Controllers\RegUserController::class, 'Update']);
+
+    Route::get('/admin/addrole',[RoleController::class,'addRole'])->name('admin.addRole');
 
     Route::get('/admin/settings', [App\Http\Controllers\SettingController::class, 'index'])->name('admin.settings');
     Route::post('/admin/settings', [App\Http\Controllers\SettingController::class, 'savedata'])->name('admin.settings.addsettings');
@@ -119,7 +122,7 @@ Route::get('/', function () {
     Route::get('/admin/orders',[OrderController::class,'index'])->name('admin.order.view');
     Route::put('/admin/orders/{id}', [OrderController::class, 'update'])->name('admin.orders.update');
     Route::get('/admin/orders/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
-    Route::get('/admin/orders/{id}/delete', [OrderController::class, 'destroy'])->name('admin.orders.delete');
+    Route::delete('/admin/orders/{id}/delete', [OrderController::class, 'destroy'])->name('admin.orders.delete');
 
 
 

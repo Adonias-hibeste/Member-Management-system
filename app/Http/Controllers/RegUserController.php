@@ -11,14 +11,20 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ProfileFormRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 
 class RegUserController extends Controller
 {
     public function Users(){
-        $users= Admin::all();
-        return view("admin.registeredusers",compact("users"));
+        $profiles= Profile::with('user')->get();
+        $staffs=Admin::all();
+        $roles=Role::all();
+        return view("admin.registeredusers",compact("profiles","staffs","roles"));
     }
+
+
     public function EditUser($user_id){
         $user= Admin::find($user_id);
         return view("admin.edituser",compact("user"));
@@ -34,6 +40,7 @@ class RegUserController extends Controller
         }
         return redirect()->route('admin.registeredusers')->with('message','no user found');
     }
+
 
 
 

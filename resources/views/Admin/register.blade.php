@@ -92,14 +92,19 @@
                                                 <label for="gender">Gender</label>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" name="user_name" type="text"
-                                                    value="{{ old('user_name') }}" required />
-                                                <label for="user_name">User Name</label>
-                                            </div>
-                                            <div class="form-floating mb-3">
                                                 <input class="form-control" name="email" type="email"
                                                     value="{{ old('email') }}" required />
                                                 <label for="email">Email</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <select name="membership" class="form-control" required>
+                                                    @foreach ($memberships as $membership)
+                                                        <option value="{{ $membership->id }}"
+                                                            {{ old('membership') == $membership->id ? 'selected' : '' }}>
+                                                            {{ $membership->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <label for="email">choose membership</label>
                                             </div>
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" name="password" type="password" required />

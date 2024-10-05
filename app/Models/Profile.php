@@ -14,7 +14,7 @@ class Profile extends Model
     protected $table='profiles';
     protected $fillable=[
     'user_id',
-    'user_name',
+    'membership_id',
     'image',
     'age',
     'address',
@@ -24,5 +24,8 @@ class Profile extends Model
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+    Public function membership(){
+        return $this->belongsTo(Membership::class);
     }
 }

@@ -14,4 +14,8 @@ class Membership extends Model
         'duration',
         'price',
     ];
+
+    public function profile(){
+        return $this->hasMany(Profile::class);
+    }
 }

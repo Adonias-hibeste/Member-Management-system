@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Admin;
+use App\Models\Membership;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,8 +15,8 @@ use Illuminate\Support\Facades\Log;
 class AdminController extends Controller
 {
     public function register(){
-        $currentStep=request('current_step',1);
-        return view ('Admin.register',compact('currentStep'));
+      $memberships= Membership::all();
+        return view ('Admin.register',compact('memberships'));
     }
 
     public function registerPost(Request $request)
@@ -27,7 +28,7 @@ class AdminController extends Controller
                 'address' => 'required|string',
                 'gender' => 'required|in:male,female',
                 'phone_number' => 'required',
-                'user_name' => 'required|string|max:255|unique:profiles,user_name',
+                'membership' => 'required|integer',
                 'email' => 'required|email|max:255|unique:users,email',
                 'password' => 'required|string|min:8',
 
@@ -42,7 +43,7 @@ class AdminController extends Controller
 
             $profile = Profile::create([
                 'user_id'=>$user->id,
-                'user_name' => $request->user_name,
+                'membership_id' => $request->membership,
                 'age' => $request->age,
                 'address' => $request->address,
                 'gender' => $request->gender,
