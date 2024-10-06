@@ -13,7 +13,7 @@
             <i class="fas fa-plus"></i> Add Role
         </div>
         <div class="card-body">
-            <form action="{{ route('admin.catagory.store') }}" method="POST">
+            <form action="{{ route('admin.role.store') }}" method="POST">
                 @csrf
 
                 <div class="my-2">
@@ -30,21 +30,18 @@
                 <div class="form-check">
                     @foreach ($permissions as $permission)
                         <div>
-                            <input type="checkbox" name="permission[]" value="{{ $permission->id }}">
+                            <input type="checkbox" name="permissions[]" value="{{ $permission->name }}"
+                                class="form-check-input" id="permission-{{ $permission->id }}">
                             <label for="permission-{{ $permission->id }}"
                                 class="form-check-label">{{ $permission->name }}</label>
                         </div>
                     @endforeach
                 </div>
+
+
+                <button type="submit" class="btn btn-primary mt-3">Add Role</button>
+            </form>
         </div>
-
-
-
-
-
-        <button type="submit" class="btn btn-primary mt-3">Add Role</button>
-        </form>
-    </div>
     </div>
 
 @endsection

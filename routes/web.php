@@ -63,7 +63,8 @@ Route::get('/', function () {
     Route::get('/admin/registeredusers/{user_id}', [App\Http\Controllers\RegUserController::class, 'EditUser'])->name('admin.edituser');//is it nessary for the admin to edit users info
     Route::put('/admin/updateuser/{user_id}', [App\Http\Controllers\RegUserController::class, 'Update']);
 
-    Route::get('/admin/addrole',[RoleController::class,'addRole'])->name('admin.addRole');
+    Route::get('/admin/addrole',[RoleController::class,'create'])->name('admin.addRole');
+    Route::post('/admin/storerole',[RoleController::class,'store'])->name('admin.role.store');
 
     Route::get('/admin/settings', [App\Http\Controllers\SettingController::class, 'index'])->name('admin.settings');
     Route::post('/admin/settings', [App\Http\Controllers\SettingController::class, 'savedata'])->name('admin.settings.addsettings');

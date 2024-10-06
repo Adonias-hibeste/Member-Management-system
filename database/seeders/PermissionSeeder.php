@@ -13,15 +13,15 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::create(['name' => 'view_users']);
-        Permission::create(['name'=> 'add_users']);
-        Permission::create(['name'=>'edit_user']);
-        Permission::create(['name'=> 'delete_user']);
+        Permission::create(['name' => 'view_users','guard_name' => 'admin']);
+        Permission::create(['name'=> 'add_users','guard_name' => 'admin']);
+        Permission::create(['name'=>'edit_user','guard_name' => 'admin']);
+        Permission::create(['name'=> 'delete_user','guard_name' => 'admin']);
 
         //Role managment
-        Permission::create(['name'=> 'view_roles']);
-        Permission::create(['name'=> 'add_roles']);
-        Permission::create(['name'=> 'edit_role']);
-        Permission::create(['name'=> 'delete_role']);
+        Permission::create(['name'=> 'view_roles','guard_name' => 'admin']);
+        Permission::create(['name'=> 'add_roles','guard_name' => 'admin']);
+        Permission::create(['name'=> 'edit_role','guard_name' => 'admin']);
+        Permission::create(['name'=> 'delete_role','guard_name' => 'admin']);
     }
 }
