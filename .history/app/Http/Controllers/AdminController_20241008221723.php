@@ -190,6 +190,7 @@ class AdminController extends Controller
         return response()->json(['message' => 'Profile updated successfully!', 'user' => $user, 'profile' => $user->profile], 200);
     }
 
+
 }
 
 

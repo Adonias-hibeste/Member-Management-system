@@ -153,42 +153,8 @@ class AdminController extends Controller
             'user' => $user,
             'profile' => $profile,
         ], 200);
-    }public function updateapp(Request $request)
-    {
-        $request->validate([
-            'full_name' => 'required|string|max:255',
-            'age' => 'required|numeric|min:18|max:100',
-            'address' => 'required|string',
-            'gender' => 'required|in:male,female',
-            'phone_number' => 'required',
-            'membership' => 'required|integer',
-            'email' => 'required|email|max:255|unique:users,email,' . $request->user()->id,
-            'current_password' => 'required|string|min:8',
-            'new_password' => 'nullable|string|min:8',
-        ]);
-
-        $user = $request->user();
-
-        if (!Hash::check($request->current_password, $user->password)) {
-            return response()->json(['message' => 'Current password is incorrect'], 401);
-        }
-
-        $user->update([
-            'full_name' => $request->full_name,
-            'email' => $request->email,
-            'password' => $request->new_password ? Hash::make($request->new_password) : $user->password,
-        ]);
-
-        $user->profile->update([
-            'membership_id' => $request->membership,
-            'age' => $request->age,
-            'address' => $request->address,
-            'gender' => $request->gender,
-            'phone_number' => $request->phone_number,
-        ]);
-
-        return response()->json(['message' => 'Profile updated successfully!', 'user' => $user, 'profile' => $user->profile], 200);
     }
+
 
 }
 

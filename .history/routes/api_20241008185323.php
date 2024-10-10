@@ -17,7 +17,7 @@ use App\Http\Controllers\EventRegisterController;
      Route::get('memberships', [MembershipController::class, 'getMemberships']);
      Route::post('register', [AdminController::class, 'registerapp']);
      Route::post('login', [AdminController::class, 'loginapp']);
-     Route::post('updateprofile', [AdminController::class, 'updateapp']);
+
      Route::post('upload-profile-image', [ProfilepicController::class, 'uploadProfileImage']);
 
      Route::get('categories', [CatagoryController::class, 'categoryapp']);

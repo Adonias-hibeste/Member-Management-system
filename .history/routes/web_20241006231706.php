@@ -78,12 +78,6 @@ Route::get('/', function () {
 
     Route::get('/user/logout', [App\Http\Controllers\UserController::class, 'UserLogout'])->name('user.logout');
 
-    Route::get('/user/profile', [App\Http\Controllers\MemberController::class, 'profile'])->name('user.profile');
-    Route::get('/user/createprofile', [App\Http\Controllers\MemberController::class, 'Create'])->name('user.createprofile');
-    Route::post('/user/createprofile', [App\Http\Controllers\MemberController::class, 'Store'])->name('user.createprofile-profile');
-    Route::get('/user/profile/{profile_id}', [App\Http\Controllers\MemberController::class, 'Edit'])->name('user.edit');
-    Route::put('/user/updateprofile/{profile_id}', [App\Http\Controllers\MemberController::class, 'Update']);
-    Route::get('user/deleteprofile/{profile_id}', [App\Http\Controllers\MemberController::class, 'Destroy']);
 
 
     Route::get('/user/payment', [PaymentController::class, 'showPaymentForm'])->name('user.payment.form');
