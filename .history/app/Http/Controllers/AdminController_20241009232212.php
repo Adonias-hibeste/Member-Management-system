@@ -192,9 +192,8 @@ class AdminController extends Controller
         ]);
 
         // Return a response indicating success
-        return response()->json(['message' => 'Profile updated successfully!', 'user' => $user->fresh(), 'profile' => $user->profile], 200);
+        return response()->json(['message' => 'Profile updated successfully!', 'user' => $user, 'profile' => $user->profile], 200);
     }
-
 
     public function deleteUser($id)
     {

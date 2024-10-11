@@ -155,13 +155,12 @@ class AdminController extends Controller
         ], 200);
     }public function updateapp(Request $request)
     {
-        // Validate the incoming request data
         $request->validate([
             'full_name' => 'required|string|max:255',
             'age' => 'required|numeric|min:18|max:100',
             'address' => 'required|string',
-            'gender' => 'required|in:male,female,other', // Added 'other' as a possible value
-            'phone_number' => 'required|string', // Specify type as string
+            'gender' => 'required|in:male,female',
+            'phone_number' => 'required',
             'membership' => 'required|integer',
             'email' => 'required|email|max:255|unique:users,email,' . $request->user()->id,
             'current_password' => 'required|string|min:8',
@@ -170,19 +169,16 @@ class AdminController extends Controller
 
         $user = $request->user();
 
-        // Check if the current password is correct
         if (!Hash::check($request->current_password, $user->password)) {
             return response()->json(['message' => 'Current password is incorrect'], 401);
         }
 
-        // Update user information
         $user->update([
             'full_name' => $request->full_name,
             'email' => $request->email,
             'password' => $request->new_password ? Hash::make($request->new_password) : $user->password,
         ]);
 
-        // Update user profile information
         $user->profile->update([
             'membership_id' => $request->membership,
             'age' => $request->age,
@@ -191,11 +187,8 @@ class AdminController extends Controller
             'phone_number' => $request->phone_number,
         ]);
 
-        // Return a response indicating success
-        return response()->json(['message' => 'Profile updated successfully!', 'user' => $user->fresh(), 'profile' => $user->profile], 200);
+        return response()->json(['message' => 'Profile updated successfully!', 'user' => $user, 'profile' => $user->profile], 200);
     }
-
-
     public function deleteUser($id)
     {
         $user = User::find($id);
