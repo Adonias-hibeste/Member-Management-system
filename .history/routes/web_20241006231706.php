@@ -63,11 +63,7 @@ Route::get('/', function () {
     Route::get('/admin/registeredusers/{user_id}', [App\Http\Controllers\RegUserController::class, 'EditUser'])->name('admin.edituser');//is it nessary for the admin to edit users info
     Route::put('/admin/updateuser/{user_id}', [App\Http\Controllers\RegUserController::class, 'Update']);
 
-    Route::get("/admin/addstaff",[AdminController::class,'create_staff'])->name('admin.createstaff');
-    Route::post('/admin/storeStaff',[AdminController::class,'store'])->name('admin.staff.store');
-
-    Route::get('/admin/addrole',[RoleController::class,'create'])->name('admin.addRole');
-    Route::post('/admin/storerole',[RoleController::class,'store'])->name('admin.role.store');
+    Route::get('/admin/addrole',[RoleController::class,'addRole'])->name('admin.addRole');
 
     Route::get('/admin/settings', [App\Http\Controllers\SettingController::class, 'index'])->name('admin.settings');
     Route::post('/admin/settings', [App\Http\Controllers\SettingController::class, 'savedata'])->name('admin.settings.addsettings');
@@ -82,12 +78,6 @@ Route::get('/', function () {
 
     Route::get('/user/logout', [App\Http\Controllers\UserController::class, 'UserLogout'])->name('user.logout');
 
-    Route::get('/user/profile', [App\Http\Controllers\MemberController::class, 'profile'])->name('user.profile');
-    Route::get('/user/createprofile', [App\Http\Controllers\MemberController::class, 'Create'])->name('user.createprofile');
-    Route::post('/user/createprofile', [App\Http\Controllers\MemberController::class, 'Store'])->name('user.createprofile-profile');
-    Route::get('/user/profile/{profile_id}', [App\Http\Controllers\MemberController::class, 'Edit'])->name('user.edit');
-    Route::put('/user/updateprofile/{profile_id}', [App\Http\Controllers\MemberController::class, 'Update']);
-    Route::get('user/deleteprofile/{profile_id}', [App\Http\Controllers\MemberController::class, 'Destroy']);
 
 
     Route::get('/user/payment', [PaymentController::class, 'showPaymentForm'])->name('user.payment.form');
@@ -114,9 +104,6 @@ Route::get('/', function () {
 
     Route::get('/admin/product/addProducts',[ProductController::class,'create'])->name('admin.createProduct');
     Route::post('/admin/product/store',[ProductController::class,'store'])->name('admin.product.store');
-    Route::get('/admin/product/{id}/edit',[ProductController::class,'edit'])->name('admin.product.edit');
-    Route::put('/admin/product/edit/{id}',[ProductController::class,'update'])->name('admin.product.update');
-    Route::delete('/admin/product/{id}/delete',[ProductController::class, 'destroy'])->name('admin.product.destroy');
 
 
     Route::get('/admin/orders',[OrderController::class,'index'])->name('admin.order.view');

@@ -7,12 +7,10 @@ use App\Models\Admin;
 use App\Models\Membership;
 use App\Models\Profile;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
 {
@@ -35,22 +33,24 @@ class AdminController extends Controller
     ]);
 
     $user = User::create([
-                'full_name' => $request->full_name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
+        'full_name' => $request->full_name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password), // Hash the password
+    ]);
 
-            $profile = Profile::create([
-                'user_id'=>$user->id,
-                'membership_id' => $request->membership,
-                'age' => $request->age,
-                'membership_endDate' => Carbon::now()->addDays(30),
-                'address' => $request->address,
-                'gender' => $request->gender,
-                'phone_number' => $request->phone_number,
-            ]);
-            return redirect()->route('admin.login')->with('success', 'Registration completed successfully!');
-        }
+    $profile = Profile::create([
+        'user_id' => $user->id,
+        'membership_id' => $request->membership,
+        'age' => $request->age,
+        'address' => $request->address,
+        'gender' => $request->gender,
+        'phone_number' => $request->phone_number,
+    ]);
+
+    return redirect()->route('admin.login')->with('success', 'Registration completed successfully!');
+}
+
+
 
 
 
@@ -79,7 +79,7 @@ class AdminController extends Controller
             }
         }
 
-        else if (Auth::guard(name: 'web')->attempt($credentials)) {
+        else if (Auth::guard('web')->attempt($credentials)) {
             $user = Auth::guard('web')->user(); // Fetch user
             if ($user) {
                 //dd($user);
@@ -91,52 +91,13 @@ class AdminController extends Controller
         ])->onlyInput('email');
     }
 
-    public function create_staff(){
-        $roles=Role::all();
-        return view('Admin.staff.createStaff',compact('roles'));
-    }
-
-    public function store(Request $request){
-        $request->validate([
-            'name'=>'required|string|max:255',
-            'gender'=>'required',
-            'email'=>['required',
-                     'email',
-                    'unique:admins,email'],
-            'phone_number'=>[
-                'required',
-                'digits:10',
-                'unique:admins,phone',
-            ],
-            'image' => 'required|mimes:jpeg,png,jpg,gif|max:2048',
-            'address'=>'required|string',
-            'password'=>'required',
-            'roles'=>'required',
-        ]);
-
-        if ($request->hasFile('image')){
-            $file = $request->file('image');
-            $filename=time(). "." . $file->getClientOriginalExtension();
-
-           $file->move('uploads/staffs',$filename);
 
 
-        }
 
-        $admin = Admin::create([
-            'full_name'=>$request->name,
-            'gender'=>$request->gender,
-            'email'=>$request->email,
-            'phone'=>$request->phone_number,
-            'address'=>$request->address,
-            'password'=>bcrypt($request->password),
-            'image'=>$filename,
 
-        ]);
-        $admin->roles()->attach($request->roles);
 
-        return redirect()->route('admin.registeredusers');
-    }
+
+
 
     public function registerapp(Request $request)
     {
@@ -194,13 +155,12 @@ class AdminController extends Controller
         ], 200);
     }public function updateapp(Request $request)
     {
-        // Validate the incoming request data
         $request->validate([
             'full_name' => 'required|string|max:255',
             'age' => 'required|numeric|min:18|max:100',
             'address' => 'required|string',
-            'gender' => 'required|in:male,female,other', // Added 'other' as a possible value
-            'phone_number' => 'required|string', // Specify type as string
+            'gender' => 'required|in:male,female',
+            'phone_number' => 'required',
             'membership' => 'required|integer',
             'email' => 'required|email|max:255|unique:users,email,' . $request->user()->id,
             'current_password' => 'required|string|min:8',
@@ -209,19 +169,16 @@ class AdminController extends Controller
 
         $user = $request->user();
 
-        // Check if the current password is correct
         if (!Hash::check($request->current_password, $user->password)) {
             return response()->json(['message' => 'Current password is incorrect'], 401);
         }
 
-        // Update user information
         $user->update([
             'full_name' => $request->full_name,
             'email' => $request->email,
             'password' => $request->new_password ? Hash::make($request->new_password) : $user->password,
         ]);
 
-        // Update user profile information
         $user->profile->update([
             'membership_id' => $request->membership,
             'age' => $request->age,
@@ -230,23 +187,7 @@ class AdminController extends Controller
             'phone_number' => $request->phone_number,
         ]);
 
-        // Return a response indicating success
-        return response()->json(['message' => 'Profile updated successfully!', 'user' => $user->fresh(), 'profile' => $user->profile], 200);
-    }
-
-
-    public function deleteUser($id)
-    {
-        $user = User::find($id);
-
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-
-        // Delete the user
-        $user->delete();
-
-        return response()->json(['message' => 'User deleted successfully'], 200);
+        return response()->json(['message' => 'Profile updated successfully!', 'user' => $user, 'profile' => $user->profile], 200);
     }
 
 

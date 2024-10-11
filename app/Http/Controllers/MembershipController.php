@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Membership;
@@ -8,10 +7,10 @@ use Illuminate\Http\Request;
 class MembershipController extends Controller
 {
     public function index(){
-        $memberships=Membership::all();
-
-        return view('Admin.membership.index',compact('memberships'));
+        $memberships = Membership::all();
+        return view('Admin.membership.index', compact('memberships'));
     }
+
     public function create(){
         return view('Admin.membership.create');
     }
@@ -31,5 +30,12 @@ class MembershipController extends Controller
         ]);
 
         return redirect()->route('admin.membership.index')->with('success', 'Membership added successfully!');
+    }
+
+    // Ensure this method is correctly defined
+    public function getMemberships()
+    {
+        $memberships = Membership::all();
+        return response()->json($memberships);
     }
 }

@@ -1,6 +1,5 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CartController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AdminController;
@@ -17,19 +16,11 @@ use App\Http\Controllers\EventRegisterController;
      Route::get('memberships', [MembershipController::class, 'getMemberships']);
      Route::post('register', [AdminController::class, 'registerapp']);
      Route::post('login', [AdminController::class, 'loginapp']);
-     Route::post('updateprofile', [AdminController::class, 'updateapp']);
-     Route::post('upload-profile-image', [ProfilepicController::class, 'uploadProfileImage']);
-     Route::delete('user/{id}', [AdminController::class, 'deleteUser']);
 
-     Route::get('categories', [CatagoryController::class, 'categoryapp']);
+     Route::post('/upload-profile-image', [ProfilepicController::class, 'uploadProfileImage']);
 
-
-     Route::get('products', [ProductController::class, 'productapp']);
-
-     Route::post('cart/add', [CartController::class, 'addapp']);
-     Route::get('cart/show', [CartController::class, 'showapp']);
-     Route::post('cart/update', [CartController::class, 'updateapp']);
-     Route::post('cart/remove', [CartController::class, 'removeapp']);
+        Route::get('categories', [CatagoryController::class, 'categoryapp']);
+        Route::get('products', [ProductController::class, 'indexproapp']);
 
 
     Route::get('blogs', [PostController::class, 'index']);
