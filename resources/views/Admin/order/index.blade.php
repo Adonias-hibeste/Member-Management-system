@@ -74,14 +74,12 @@
         </div>
     </div>
 
-    <script>
-        // Disable the dropdown once "Paid" is selected
-        document.querySelectorAll('.payment-status-dropdown').forEach(function(dropdown) {
-            dropdown.addEventListener('change', function() {
-                if (this.value === 'paid') {
-                    this.disabled = true;
-                }
-            });
+    {{-- <script>
+        document.querySelector('form').addEventListener('submit', function() {
+            const dropdown = document.querySelector('.payment-status-dropdown');
+            if (dropdown.value === 'paid') {
+                dropdown.disabled = true; // Disable before submitting
+            }
         });
-    </script>
+    </script> --}}
 @endsection

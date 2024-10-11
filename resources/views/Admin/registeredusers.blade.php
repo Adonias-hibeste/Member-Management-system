@@ -66,78 +66,81 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-                <div class="tab-pane fade" id="Staff">
-                    <h4 class="d-flex justify-content-between align-items-center">
-                        {{-- Staffs --}}
-                        <a href="#" class="btn btn-primary btn-sm">Add Staffs</a>
-                    </h4>
-                    <table class="table table-bordered table-hover">
-                        <thead style="background-color: #343a40; color: white;">
-                            <tr>
-                                <th>ID</th>
-                                <th>Full Name</th>
-                                <th>Gender</th>
-                                <th>email</th>
-                                <th>phone_number</th>
-                                <th>Role</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($staffs as $staff)
-                                <td>{{ $staff->id }}</td>
-                                <td>{{ $staff->full_name }}</td>
-                                <td>{{ $staff->gender }}</td>
-                                <td>{{ $staff->email }}</td>
-                                <td>{{ $staff->phone_number }}</td>
-                                <td>{{ $staff->Role }}</td>
-                            @endforeach
 
-                        </tbody>
-                    </table>
-                </div>
-                <div class="tab-pane fade" id="Roles">
-                    <h4 class="d-flex justify-content-between align-items-center">
-
-                        <a href="{{ route('admin.addRole') }}" class="btn btn-primary btn-sm">Add role</a>
-                    </h4>
-                    <table class="table table-bordered table-hover">
-                        <thead style="background-color: #343a40; color: white;">
-                            <tr>
-
-                                <th>Role</th>
-                                <th>Action</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($roles as $role)
+                    <div class="tab-pane fade" id="Staff">
+                        <h4 class="d-flex justify-content-between align-items-center">
+                            {{-- Staffs --}}
+                            <a href="{{ route('admin.createstaff') }}" class="btn btn-primary btn-sm">Add Staffs</a>
+                        </h4>
+                        <table class="table table-bordered table-hover">
+                            <thead style="background-color: #343a40; color: white;">
                                 <tr>
-                                    <td>{{ $role->name }}</td>
-                                    <td>
-                                        <div class="row g-2">
-                                            <div style="margin-left: 12px; width:10px; padding-right: 55px;">
-
-                                                <a href="#"><i class="fa-solid fa-pen-to-square fa-2x"></i></a>
-
-                                            </div>
-                                            <div class="col" style="margin-right: 50px; width:5px;">
-
-                                                <button class="btn btn-danger btn-sm ms-0"
-                                                    onclick="confirmDeletion({{ $role->id }})">X</button>
-                                                <form id="delete-form-{{ $role->id }}" action="#" method="POST"
-                                                    style="display: none;">
-                                                    @csrf
-                                                    @method('delete')
-                                                </form>
-
-                                            </div>
-                                        </div>
-                                    </td>
+                                    <th>ID</th>
+                                    <th>Full Name</th>
+                                    <th>Gender</th>
+                                    <th>email</th>
+                                    <th>phone_number</th>
+                                    <th>Address</th>
+                                    <th>Role</th>
                                 </tr>
+                            </thead>
+                            @foreach ($staffs as $staff)
+                                <tbody>
+                                    <td>{{ $staff->id }}</td>
+                                    <td>{{ $staff->full_name }}</td>
+                                    <td>{{ $staff->gender }}</td>
+                                    <td>{{ $staff->email }}</td>
+                                    <td>{{ $staff->phone }}</td>
+                                    <td>{{ $staff->address }}</td>
+                                    <td>{{ $staff->getRoleNames()->implode(',') }}</td>
+
+                                </tbody>
                             @endforeach
-                        </tbody>
-                    </table>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="Roles">
+                        <h4 class="d-flex justify-content-between align-items-center">
+
+                            <a href="{{ route('admin.addRole') }}" class="btn btn-primary btn-sm">Add role</a>
+                        </h4>
+                        <table class="table table-bordered table-hover">
+                            <thead style="background-color: #343a40; color: white;">
+                                <tr>
+
+                                    <th>Role</th>
+                                    <th>Action</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($roles as $role)
+                                    <tr>
+                                        <td>{{ $role->name }}</td>
+                                        <td>
+                                            <div class="row g-2">
+                                                <div style="margin-left: 12px; width:10px; padding-right: 55px;">
+
+                                                    <a href="#"><i class="fa-solid fa-pen-to-square fa-2x"></i></a>
+
+                                                </div>
+                                                <div class="col" style="margin-right: 50px; width:5px;">
+
+                                                    <button class="btn btn-danger btn-sm ms-0"
+                                                        onclick="confirmDeletion({{ $role->id }})">X</button>
+                                                    <form id="delete-form-{{ $role->id }}" action="#"
+                                                        method="POST" style="display: none;">
+                                                        @csrf
+                                                        @method('delete')
+                                                    </form>
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

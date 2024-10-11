@@ -39,10 +39,16 @@
                                     <a href="{{ route('admin.viewProducts.details', $product->id) }}"
                                         class="btn btn-primary">view</a>
 
-                                    <a href="" class="btn btn-primary">Edit</a>
+                                    <a href="{{ route('admin.product.edit', $product->id) }}"
+                                        class="btn btn-primary">Edit</a>
 
-                                    <a href="" class="btn btn-primary"
-                                        style="background-color: red; color: white; border-color: red;">Delete</a>
+                                    <form action="{{ route('admin.product.destroy', $product->id) }}" method="POST"
+                                        style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger"
+                                            onclick="return confirm('Are you sure ypu want to remove this product?')">Delete</button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach

@@ -20,6 +20,8 @@ class AdminSeeder extends Seeder
             'gender'=>'test',
             'email' => 'admin@gmail.com',
             'email_verified_at' => now(),
+            'phone'=>'0123456789',
+            'address'=>'addis abeba',
             'password' =>  bcrypt('12345678'),
 
         ]);

@@ -101,31 +101,34 @@
                                                     @foreach ($memberships as $membership)
                                                         <option value="{{ $membership->id }}"
                                                             {{ old('membership') == $membership->id ? 'selected' : '' }}>
-                                                            {{ $membership->name }}</option>
+                                                            {{ $membership->name }} / {{ $membership->price }} birr
+                                                            per month
+                                                        </option>
                                                     @endforeach
                                                 </select>
-                                                <label for="email">choose membership</label>
+                                                <label for="membership">Choose Membership</label>
                                             </div>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control" name="password" type="password" required />
-                                                <label for="password">Password</label>
-                                            </div>
-
-
-                                            <button class="btn btn-success" type="submit">Sign Up</button>
                                         </div>
-                                    </form>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" name="password" type="password" required />
+                                            <label for="password">Password</label>
+                                        </div>
 
-                                    <div class="card-footer text-center py-3">
-                                        <div class="small"><a href="{{ route('admin.login') }}"> Sign in </a></div>
-                                    </div>
+
+                                        <button class="btn btn-success" type="submit">Sign Up</button>
+                                </div>
+                                </form>
+
+                                <div class="card-footer text-center py-3">
+                                    <div class="small"><a href="{{ route('admin.login') }}"> Sign in </a></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </main>
         </div>
+        </main>
+    </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

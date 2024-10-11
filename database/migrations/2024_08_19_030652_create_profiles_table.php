@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('membership_id')->nullable();
+            $table->string('member_payment_status')->default('pending');
+            $table->date('membership_endDate');
             $table->String('image')->nullable();
             $table->string('age');
             $table->text('address');

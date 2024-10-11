@@ -64,11 +64,12 @@
     </div>
 
     <script>
+        const selectedFiles = []; // Array to keep track of selected files
+
         document.getElementById('images').addEventListener('change', function(e) {
             const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-
-            // Clear the previous image previews only when new images are selected
-            //  imagePreviewContainer.innerHTML = '';
+            // Clear previous previews
+            imagePreviewContainer.innerHTML = '';
 
             // Loop through the selected files and append them to the preview container
             Array.from(e.target.files).forEach((file, index) => {
@@ -80,11 +81,12 @@
                         <div class="card">
                             <img src="${event.target.result}" class="card-img-top" alt="Image Preview">
                             <div class="card-body text-center">
-                                <button type="button" class="btn btn-danger btn-sm remove-image-btn" data-index="${index}">Remove</button>
+                                <button type="button" class="btn btn-danger btn-sm remove-image-btn" data-index="${selectedFiles.length}">Remove</button>
                             </div>
                         </div>
                     `;
                     imagePreviewContainer.appendChild(imgDiv);
+                    selectedFiles.push(file); // Keep track of selected files
                 };
                 reader.readAsDataURL(file);
             });
@@ -94,10 +96,33 @@
                 if (e.target.classList.contains('remove-image-btn')) {
                     const index = e.target.getAttribute('data-index');
                     e.target.closest('.col-md-3').remove();
-                    // Set the value of the removed file input to null
-                    e.target.closest('form').elements['images[]'][index] = null;
+                    // Remove the file from the selectedFiles array
+                    selectedFiles.splice(index, 1);
+                    // Update the data-index for subsequent images
+                    updateDataIndex();
                 }
             });
+        });
+
+        // Update data-index for all remaining image buttons
+        function updateDataIndex() {
+            const buttons = document.querySelectorAll('.remove-image-btn');
+            buttons.forEach((button, index) => {
+                button.setAttribute('data-index', index);
+            });
+        }
+
+        // Override form submission to attach the new files
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const dataTransfer = new DataTransfer(); // Create a new DataTransfer object
+
+            // Add the selected files to the DataTransfer object
+            selectedFiles.forEach(file => {
+                dataTransfer.items.add(file);
+            });
+
+            // Override the file input's files property
+            document.getElementById('images').files = dataTransfer.files;
         });
     </script>
 @endsection

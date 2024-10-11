@@ -11,7 +11,7 @@ class Membership extends Model
 
     protected $fillable =[
         'name',
-        'duration',
+        // 'duration',
         'price',
     ];
 

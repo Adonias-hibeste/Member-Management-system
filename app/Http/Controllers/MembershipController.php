@@ -19,14 +19,14 @@ class MembershipController extends Controller
     public function store(Request $request){
         $request->validate([
             'membership_name' => 'required|string|max:255',
-            'duration' => 'required|string|max:50',
+
             'price' => 'required|numeric',
         ]);
 
         // Create a new membership
         Membership::create([
             'name' => $request->membership_name,
-            'duration' => $request->duration,
+
             'price' => $request->price,
         ]);
 

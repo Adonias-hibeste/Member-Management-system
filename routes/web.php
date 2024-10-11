@@ -63,6 +63,9 @@ Route::get('/', function () {
     Route::get('/admin/registeredusers/{user_id}', [App\Http\Controllers\RegUserController::class, 'EditUser'])->name('admin.edituser');//is it nessary for the admin to edit users info
     Route::put('/admin/updateuser/{user_id}', [App\Http\Controllers\RegUserController::class, 'Update']);
 
+    Route::get("/admin/addstaff",[AdminController::class,'create_staff'])->name('admin.createstaff');
+    Route::post('/admin/storeStaff',[AdminController::class,'store'])->name('admin.staff.store');
+
     Route::get('/admin/addrole',[RoleController::class,'create'])->name('admin.addRole');
     Route::post('/admin/storerole',[RoleController::class,'store'])->name('admin.role.store');
 
@@ -118,6 +121,9 @@ Route::get('/', function () {
 
     Route::get('/admin/product/addProducts',[ProductController::class,'create'])->name('admin.createProduct');
     Route::post('/admin/product/store',[ProductController::class,'store'])->name('admin.product.store');
+    Route::get('/admin/product/{id}/edit',[ProductController::class,'edit'])->name('admin.product.edit');
+    Route::put('/admin/product/edit/{id}',[ProductController::class,'update'])->name('admin.product.update');
+    Route::delete('/admin/product/{id}/delete',[ProductController::class, 'destroy'])->name('admin.product.destroy');
 
 
     Route::get('/admin/orders',[OrderController::class,'index'])->name('admin.order.view');

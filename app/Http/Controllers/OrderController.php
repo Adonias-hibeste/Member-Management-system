@@ -107,6 +107,10 @@ public function show($id)
 
 public function update(Request $request, $id)
 {
+    //  $request->validate([
+    //     'payment_status' => 'required|string', // Ensure payment_status is present and a string
+    // ]);
+    //dd( $request->all());
     $order = Order::find($id);
     $order->payment_status = $request->input('payment_status');
     $order->save();
@@ -115,6 +119,7 @@ public function update(Request $request, $id)
 }
 
 public function destroy($id){
+
     $order=Order::find($id);
     $order->delete();
 
