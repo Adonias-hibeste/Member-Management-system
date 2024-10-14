@@ -221,25 +221,29 @@ class AdminController extends Controller
 
 
 
-// Fetch user profile data by user ID
-public function show($id)
+
+public function show(Request $request)
 {
-    $user = User::find($id);
+    $user = $request->user(); // This fetches the authenticated user.
+
     if ($user) {
         return response()->json($user);
-    } else {
-        return response()->json(['error' => 'User not found'], 404);
     }
+
+    return response()->json(['error' => 'User not found'], 404);
 }
 
-// Update user profile data by user ID
-public function update(Request $request, $id)
+
+
+public function update(Request $request)
 {
-    $user = User::find($id);
+    $user = $request->user(); // Fetch the authenticated user
+
     if (!$user) {
         return response()->json(['error' => 'User not found'], 404);
     }
 
+    // Validate the incoming request data
     $validated = $request->validate([
         'email' => 'required|email',
         'full_name' => 'required|string',
@@ -250,10 +254,11 @@ public function update(Request $request, $id)
         'membership_id' => 'nullable|integer',
     ]);
 
+    // Update the user with the validated data
     $user->update($validated);
+
     return response()->json(['message' => 'Profile updated successfully']);
 }
-
 
 
 

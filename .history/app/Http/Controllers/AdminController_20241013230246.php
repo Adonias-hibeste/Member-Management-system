@@ -155,14 +155,13 @@ class AdminController extends Controller
         ], 200);
     }
     public function updateapp(Request $request)
-{
-    try {
+    {
         // Validate the incoming request data
         $request->validate([
             'full_name' => 'required|string|max:255',
             'age' => 'required|numeric|min:18|max:100',
             'address' => 'required|string',
-            'gender' => 'required|in:male,female',
+            'gender' => 'required|in:male,female,other', // Added 'other' as a possible value
             'phone_number' => 'required|string',
             'membership' => 'required|integer',
             'email' => 'required|email|max:255|unique:users,email,' . $request->user()->id,
@@ -197,11 +196,7 @@ class AdminController extends Controller
 
         // Return a response indicating success
         return response()->json(['message' => 'Profile updated successfully!', 'user' => $user->fresh(), 'profile' => $user->profile], 200);
-    } catch (\Exception $e) {
-        // Return detailed error information
-        return response()->json(['error' => $e->getMessage()], 500);
     }
-}
 
 
 
@@ -218,43 +213,6 @@ class AdminController extends Controller
 
         return response()->json(['message' => 'User deleted successfully'], 200);
     }
-
-
-
-// Fetch user profile data by user ID
-public function show($id)
-{
-    $user = User::find($id);
-    if ($user) {
-        return response()->json($user);
-    } else {
-        return response()->json(['error' => 'User not found'], 404);
-    }
-}
-
-// Update user profile data by user ID
-public function update(Request $request, $id)
-{
-    $user = User::find($id);
-    if (!$user) {
-        return response()->json(['error' => 'User not found'], 404);
-    }
-
-    $validated = $request->validate([
-        'email' => 'required|email',
-        'full_name' => 'required|string',
-        'address' => 'nullable|string',
-        'age' => 'nullable|integer',
-        'gender' => 'nullable|string',
-        'phone_number' => 'nullable|string',
-        'membership_id' => 'nullable|integer',
-    ]);
-
-    $user->update($validated);
-    return response()->json(['message' => 'Profile updated successfully']);
-}
-
-
 
 
 }

@@ -220,43 +220,6 @@ class AdminController extends Controller
     }
 
 
-
-// Fetch user profile data by user ID
-public function show($id)
-{
-    $user = User::find($id);
-    if ($user) {
-        return response()->json($user);
-    } else {
-        return response()->json(['error' => 'User not found'], 404);
-    }
-}
-
-// Update user profile data by user ID
-public function update(Request $request, $id)
-{
-    $user = User::find($id);
-    if (!$user) {
-        return response()->json(['error' => 'User not found'], 404);
-    }
-
-    $validated = $request->validate([
-        'email' => 'required|email',
-        'full_name' => 'required|string',
-        'address' => 'nullable|string',
-        'age' => 'nullable|integer',
-        'gender' => 'nullable|string',
-        'phone_number' => 'nullable|string',
-        'membership_id' => 'nullable|integer',
-    ]);
-
-    $user->update($validated);
-    return response()->json(['message' => 'Profile updated successfully']);
-}
-
-
-
-
 }
 
 
