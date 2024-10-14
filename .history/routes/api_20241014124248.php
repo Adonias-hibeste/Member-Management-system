@@ -23,8 +23,6 @@ use App\Http\Controllers\EventRegisterController;
      Route::put('/profile/update/{id}', [AdminController::class, 'update']);
      Route::post('user/{userId}/update-password', [AdminController::class, 'updatePassword']);
 
-
-
      Route::delete('user/{id}', [AdminController::class, 'deleteUser']);
 
      Route::get('categories', [CatagoryController::class, 'categoryapp']);

@@ -258,14 +258,21 @@ public function update(Request $request, $id)
 
     $user->update($validated);
     return response()->json(['message' => 'Profile updated successfully']);
-}
-public function updatePassword(Request $request, $userId)
+}   public function updatePassword(Request $request)
 {
     // Validate the incoming request
-    $validated = $request->validate([
+    $request->validate([
         'current_password' => 'required|string',
         'new_password' => 'required|string|min:8|confirmed', // Confirmed requires a 'new_password_confirmation' field
     ]);
+
+    // Get the authenticated user ID
+    $userId = Auth::id(); // Get the authenticated user ID
+
+    // Ensure user is authenticated
+    if (!$userId) {
+        return response()->json(['error' => 'User not authenticated.'], 401);
+    }
 
     // Fetch the user instance from the database
     $user = User::find($userId);
@@ -276,12 +283,14 @@ public function updatePassword(Request $request, $userId)
     }
 
     // Check if the current password is correct
-    if (!Hash::check($validated['current_password'], $user->password)) {
-        return response()->json(['error' => 'The provided password does not match your current password.'], 401);
+    if (!Hash::check($request->current_password, $user->password)) {
+        throw ValidationException::withMessages([
+            'current_password' => ['The provided password does not match your current password.'],
+        ]);
     }
 
     // Update the password
-    $user->password = Hash::make($validated['new_password']);
+    $user->password = Hash::make($request->new_password);
 
     // Attempt to save the user
     try {
@@ -291,8 +300,6 @@ public function updatePassword(Request $request, $userId)
         return response()->json(['error' => 'Could not update password.'], 500);
     }
 }
-
-
 
 
 }

@@ -259,16 +259,28 @@ public function update(Request $request, $id)
     $user->update($validated);
     return response()->json(['message' => 'Profile updated successfully']);
 }
-public function updatePassword(Request $request, $userId)
+ public function updatePassword(Request $request, $userId)
 {
-    // Validate the incoming request
-    $validated = $request->validate([
+    $request->validate([
         'current_password' => 'required|string',
-        'new_password' => 'required|string|min:8|confirmed', // Confirmed requires a 'new_password_confirmation' field
+        'new_password' => 'required|string|min:8|confirmed',
     ]);
 
+    // Get the authenticated user ID
+    $authUserId = Auth::id();
+
+    // Ensure user is authenticated
+    if (!$authUserId) {
+        return response()->json(['error' => 'User not authenticated.'], 401);
+    }
+
+    // Ensure the authenticated user is the same as the user attempting to change the password
+    if ($authUserId != $userId) {
+        return response()->json(['error' => 'User ID mismatch.'], 403);
+    }
+
     // Fetch the user instance from the database
-    $user = User::find($userId);
+    $user = User::find($authUserId);
 
     // Ensure user exists
     if (!$user) {
@@ -276,22 +288,23 @@ public function updatePassword(Request $request, $userId)
     }
 
     // Check if the current password is correct
-    if (!Hash::check($validated['current_password'], $user->password)) {
-        return response()->json(['error' => 'The provided password does not match your current password.'], 401);
+    if (!Hash::check($request->current_password, $user->password)) {
+        throw ValidationException::withMessages([
+            'current_password' => ['The provided password does not match your current password.'],
+        ]);
     }
 
     // Update the password
-    $user->password = Hash::make($validated['new_password']);
+    $user->password = Hash::make($request->new_password);
 
     // Attempt to save the user
     try {
-        $user->save(); // Save the user instance
+        $user->save();
         return response()->json(['message' => 'Password updated successfully.'], 200);
     } catch (\Exception $e) {
         return response()->json(['error' => 'Could not update password.'], 500);
     }
 }
-
 
 
 

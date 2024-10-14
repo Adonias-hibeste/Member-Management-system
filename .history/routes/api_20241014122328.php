@@ -21,9 +21,7 @@ use App\Http\Controllers\EventRegisterController;
      Route::post('upload-profile-image', [ProfilepicController::class, 'uploadProfileImage']);
      Route::get('/profile/{id}', [AdminController::class, 'show']);
      Route::put('/profile/update/{id}', [AdminController::class, 'update']);
-     Route::post('user/{userId}/update-password', [AdminController::class, 'updatePassword']);
-
-
+     Route::post('user/update-password', [AdminController::class, 'updatePassword']);
 
      Route::delete('user/{id}', [AdminController::class, 'deleteUser']);
 
