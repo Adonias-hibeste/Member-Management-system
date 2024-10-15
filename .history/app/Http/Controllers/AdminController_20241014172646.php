@@ -104,8 +104,6 @@ class AdminController extends Controller
 
 
 
-
-
     public function registerapp(Request $request)
     {
         $request->validate([
@@ -140,27 +138,6 @@ class AdminController extends Controller
         return response()->json(['message' => 'Registration completed successfully!', 'user' => $user, 'profile' => $profile], 201);
     }
 
-    public function loginapp(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string|min:8',
-        ]);
-
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
-        }
-
-        $profile = Profile::where('user_id', $user->id)->first();
-
-        return response()->json([
-            'message' => 'Login successful',
-            'user' => $user,
-            'profile' => $profile,
-        ], 200);
-    }
     public function updateapp(Request $request)
 {
     try {
@@ -293,19 +270,6 @@ public function updatePassword(Request $request, $userId)
     }
 }
 
-public function getMembershipEndDate($user_id)
-{
-    // Fetch the profile for the given user
-    $profile = Profile::where('user_id', $user_id)->first();
-
-    if (!$profile) {
-        return response()->json(['message' => 'Profile not found'], 404);
-    }
-
-    return response()->json([
-        'membership_endDate' => $profile->membership_endDate,
-    ], 200);
-}
 
 
 

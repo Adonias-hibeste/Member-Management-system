@@ -293,19 +293,6 @@ public function updatePassword(Request $request, $userId)
     }
 }
 
-public function getMembershipEndDate($user_id)
-{
-    // Fetch the profile for the given user
-    $profile = Profile::where('user_id', $user_id)->first();
-
-    if (!$profile) {
-        return response()->json(['message' => 'Profile not found'], 404);
-    }
-
-    return response()->json([
-        'membership_endDate' => $profile->membership_endDate,
-    ], 200);
-}
 
 
 

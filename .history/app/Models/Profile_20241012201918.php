@@ -15,7 +15,6 @@ class Profile extends Model
     protected $fillable=[
     'user_id',
     'membership_id',
-    'membership_endDate',
     'image',
     'age',
     'address',

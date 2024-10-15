@@ -23,7 +23,7 @@
 
                 </div>
 
-                {{-- <div class="my-2">
+                <div class="my-2">
                     <div class="col-12 col-md-6">
                         <label for="duration">Duration</label>
                         <select name="duration" class="form-control" required>
@@ -35,7 +35,7 @@
 
                         </select>
                     </div>
-                </div> --}}
+                </div>
 
 
                 <div class="form-group mb-3">

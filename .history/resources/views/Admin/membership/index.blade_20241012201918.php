@@ -19,7 +19,7 @@
                         <tr>
                             <th>ID</th>
                             <th>MemberShip_Type</th>
-
+                            <th>Duration</th>
                             <th>Price</th>
 
                             <th>Action</th>
@@ -31,7 +31,7 @@
                             <tr>
                                 <td>{{ $membership->id }}</td>
                                 <td>{{ $membership->name }}</td>
-
+                                <td>{{ $membership->duration }}</td>
                                 <td>{{ $membership->price }}</td>
 
 

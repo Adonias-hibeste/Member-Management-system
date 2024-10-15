@@ -104,8 +104,6 @@ class AdminController extends Controller
 
 
 
-
-
     public function registerapp(Request $request)
     {
         $request->validate([
@@ -134,11 +132,11 @@ class AdminController extends Controller
             'address' => $request->address,
             'gender' => $request->gender,
             'phone_number' => $request->phone_number,
-            'membership_endDate' => now()->toDateString(), // Set the system date as membership_endDate
         ]);
 
         return response()->json(['message' => 'Registration completed successfully!', 'user' => $user, 'profile' => $profile], 201);
     }
+
 
     public function loginapp(Request $request)
     {
@@ -293,19 +291,6 @@ public function updatePassword(Request $request, $userId)
     }
 }
 
-public function getMembershipEndDate($user_id)
-{
-    // Fetch the profile for the given user
-    $profile = Profile::where('user_id', $user_id)->first();
-
-    if (!$profile) {
-        return response()->json(['message' => 'Profile not found'], 404);
-    }
-
-    return response()->json([
-        'membership_endDate' => $profile->membership_endDate,
-    ], 200);
-}
 
 
 
