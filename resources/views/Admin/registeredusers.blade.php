@@ -37,10 +37,11 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Full Name</th>
-                                    <th>User Name</th>
                                     <th>Gender</th>
                                     <th>Email</th>
                                     <th>Phone Number</th>
+                                    <th>Paymentstatus</th>
+                                    <th>membership expiry date</th>
                                     <th>Edit</th>
 
 
@@ -51,10 +52,11 @@
                                     <tr>
                                         <td>{{ $profile->user->id }}</td>
                                         <td>{{ $profile->user->full_name }}</td>
-                                        <td>{{ $profile->user_name }}</td>
                                         <td>{{ $profile->gender }}</td>
                                         <td>{{ $profile->user->email }}</td>
                                         <td>{{ $profile->phone_number }}</td>
+                                        <td>{{ $profile->member_payment_status }}</td>
+                                        <td>{{ $profile->membership_endDate }}</td>
 
                                         <td>
                                             <a href="{{ url('admin/registeredusers/' . $profile->id) }}"

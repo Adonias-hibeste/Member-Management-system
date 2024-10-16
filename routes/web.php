@@ -73,8 +73,9 @@ Route::get('/', function () {
     Route::post('/admin/settings', [App\Http\Controllers\SettingController::class, 'savedata'])->name('admin.settings.addsettings');
 
 
+
+
     Route::get('/admin/payment', [App\Http\Controllers\AdminPaymentController::class, 'showPaymentForm'])->name('admin.payment.form');
-    Route::post('/admin/payment/process', [App\Http\Controllers\AdminPaymentController::class, 'processPayment'])->name('admin.payment.process');
     Route::get('/admin/generate-pdf/{paymentId}', [App\Http\Controllers\AdminPDFController::class, 'generatePdf'])->name('admin.payment.generate-pdf');
 
 
@@ -90,14 +91,16 @@ Route::get('/', function () {
     Route::get('user/deleteprofile/{profile_id}', [App\Http\Controllers\MemberController::class, 'Destroy']);
 
 
-    Route::get('/user/payment', [PaymentController::class, 'showPaymentForm'])->name('user.payment.form');
-    Route::post('/user/payment/process', [PaymentController::class, 'processPayment'])->name('user.payment.process');
+    Route::get('/user/membershipPayment',[PaymentController::class,'index'])->name('user.membership.payment');
+    Route::post('/user/membershipPayment/process', [PaymentController::class, 'processPayment'])->name('user.payment.process');
+    Route::get('user/membershipPayment/callback',[PaymentController::class,'paymentCallback'])->name('user.membershipPayment.callback');
     Route::get('/user/generate-pdf/{paymentId}', [PDFController::class, 'generatePdf'])->name('user.payment.generate-pdf');
 
 
     Route::get('/user/eventRegister', [App\Http\Controllers\EventRegisterController::class, 'showForm'])->name('user.eventRegister');
     Route::post('/user/eventRegister', [App\Http\Controllers\EventRegisterController::class, 'register'])->name('user.eventRegister.register');
     Route::get('/user/make_order',[OrderController::class,'make_order'])->name('user.makeOrder');
+    Route::get('/user/purchaseOrderDetail',[OrderController::class,'purchaseOrderDetail'])->name('user.purchaseOrderDetail');
 
     Route::get('/admin/events-list', [App\Http\Controllers\EventsController::class, 'getEvents'])->name('admin.events.list');
 
@@ -126,10 +129,11 @@ Route::get('/', function () {
 
 
 
-    Route::get('/admin/cart', [CartController::class, 'show'])->name('admin.cart.show');
-    Route::post('/admin/cart/add', [CartController::class, 'add'])->name('admin.cart.add');
-    Route::post('/admin/cart/update', [CartController::class, 'update'])->name('admin.cart.update');
-    Route::post('/admin/cart/remove', [CartController::class, 'remove'])->name('admin.cart.remove');
-    Route::post('/admin/checkout', [OrderController::class, 'checkout'])->name('checkout');
+    Route::get('/user/cart', [CartController::class, 'show'])->name('user.cart.show');
+    Route::post('/user/cart/add', [CartController::class, 'add'])->name('user.cart.add');
+    Route::post('/user/cart/update', [CartController::class, 'update'])->name('user.cart.update');
+    Route::post('/user/cart/remove', [CartController::class, 'remove'])->name('user.cart.remove');
+    Route::post('/user/checkout', [OrderController::class, 'checkout'])->name('checkout');
+    Route::get('/order/payment/callback', [PaymentController::class, 'paymentCallback'])->name('order.payment.callback');
 
 

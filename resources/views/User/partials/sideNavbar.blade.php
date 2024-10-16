@@ -26,7 +26,7 @@
 
 
                 <a class="nav-link" href="{{ route('user.eventRegister') }}">👤 Register for Events</a>
-                <a class="nav-link" href="{{ route('user.payment.form') }}">💳 Payments</a>
+                <a class="nav-link" href="{{ route('user.membership.payment') }}">💳 Payments</a>
                 <a class="nav-link" href="{{ route('user.makeOrder') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>make orders
                 </a>
