@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 
 
 use App\Models\User;
-
 use App\Models\Admin;
 use App\Models\Profile;
 use App\Models\Membership;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -86,7 +84,7 @@ class AdminController extends Controller
             }
         }
 
-        else if (Auth::guard(name: 'web')->attempt($credentials)) {
+        else if (Auth::guard('web')->attempt($credentials)) {
             $user = Auth::guard('web')->user(); // Fetch user
             if ($user) {
                 //dd($user);
@@ -98,52 +96,13 @@ class AdminController extends Controller
         ])->onlyInput('email');
     }
 
-    public function create_staff(){
-        $roles=Role::all();
-        return view('Admin.staff.createStaff',compact('roles'));
-    }
-
-    public function store(Request $request){
-        $request->validate([
-            'name'=>'required|string|max:255',
-            'gender'=>'required',
-            'email'=>['required',
-                     'email',
-                    'unique:admins,email'],
-            'phone_number'=>[
-                'required',
-                'digits:10',
-                'unique:admins,phone',
-            ],
-            'image' => 'required|mimes:jpeg,png,jpg,gif|max:2048',
-            'address'=>'required|string',
-            'password'=>'required',
-            'roles'=>'required',
-        ]);
-
-        if ($request->hasFile('image')){
-            $file = $request->file('image');
-            $filename=time(). "." . $file->getClientOriginalExtension();
-
-           $file->move('uploads/staffs',$filename);
 
 
-        }
 
-        $admin = Admin::create([
-            'full_name'=>$request->name,
-            'gender'=>$request->gender,
-            'email'=>$request->email,
-            'phone'=>$request->phone_number,
-            'address'=>$request->address,
-            'password'=>bcrypt($request->password),
-            'image'=>$filename,
 
-        ]);
-        $admin->roles()->attach($request->roles);
 
-        return redirect()->route('admin.registeredusers');
-    }
+
+
 
 
 

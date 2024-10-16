@@ -22,8 +22,6 @@ use App\Http\Controllers\EventRegisterController;
      Route::get('/profile/{id}', [AdminController::class, 'show']);
      Route::put('/profile/update/{id}', [AdminController::class, 'update']);
      Route::post('user/{userId}/update-password', [AdminController::class, 'updatePassword']);
-     Route::get('/user/{user_id}/membership-enddate', [AdminController::class, 'getMembershipEndDate']);
-
 
      Route::delete('user/{id}', [AdminController::class, 'deleteUser']);
 

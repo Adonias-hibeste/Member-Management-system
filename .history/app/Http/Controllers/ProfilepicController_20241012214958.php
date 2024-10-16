@@ -30,10 +30,10 @@ class ProfilepicController extends Controller
         return response()->json([
             'message' => 'Profile image uploaded successfully!',
             'profile' => [
-                'image' => url('storage/' . $profile->image),
-                // other profile fields
+                'image' => url('storage/' . $profile->image), // Ensure the filename is included
             ],
         ], 200);
+
     } catch (\Exception $e) {
         Log::error('Error uploading profile image: ' . $e->getMessage());
         return response()->json(['message' => 'Failed to upload image'], 500);

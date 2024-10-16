@@ -5,20 +5,17 @@ namespace App\Http\Controllers;
 
 
 use App\Models\User;
-
 use App\Models\Admin;
 use App\Models\Profile;
 use App\Models\Membership;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
-
-
-
-
 use Illuminate\Support\Facades\Hash;
+
+
+
+
 use Illuminate\Validation\ValidationException;
 
 class AdminController extends Controller
@@ -42,22 +39,24 @@ class AdminController extends Controller
     ]);
 
     $user = User::create([
-                'full_name' => $request->full_name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
+        'full_name' => $request->full_name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password), // Hash the password
+    ]);
 
-            $profile = Profile::create([
-                'user_id'=>$user->id,
-                'membership_id' => $request->membership,
-                'age' => $request->age,
-                'membership_endDate' => Carbon::now()->addDays(30),
-                'address' => $request->address,
-                'gender' => $request->gender,
-                'phone_number' => $request->phone_number,
-            ]);
-            return redirect()->route('admin.login')->with('success', 'Registration completed successfully!');
-        }
+    $profile = Profile::create([
+        'user_id' => $user->id,
+        'membership_id' => $request->membership,
+        'age' => $request->age,
+        'address' => $request->address,
+        'gender' => $request->gender,
+        'phone_number' => $request->phone_number,
+    ]);
+
+    return redirect()->route('admin.login')->with('success', 'Registration completed successfully!');
+}
+
+
 
 
 
@@ -86,7 +85,7 @@ class AdminController extends Controller
             }
         }
 
-        else if (Auth::guard(name: 'web')->attempt($credentials)) {
+        else if (Auth::guard('web')->attempt($credentials)) {
             $user = Auth::guard('web')->user(); // Fetch user
             if ($user) {
                 //dd($user);
@@ -98,52 +97,11 @@ class AdminController extends Controller
         ])->onlyInput('email');
     }
 
-    public function create_staff(){
-        $roles=Role::all();
-        return view('Admin.staff.createStaff',compact('roles'));
-    }
-
-    public function store(Request $request){
-        $request->validate([
-            'name'=>'required|string|max:255',
-            'gender'=>'required',
-            'email'=>['required',
-                     'email',
-                    'unique:admins,email'],
-            'phone_number'=>[
-                'required',
-                'digits:10',
-                'unique:admins,phone',
-            ],
-            'image' => 'required|mimes:jpeg,png,jpg,gif|max:2048',
-            'address'=>'required|string',
-            'password'=>'required',
-            'roles'=>'required',
-        ]);
-
-        if ($request->hasFile('image')){
-            $file = $request->file('image');
-            $filename=time(). "." . $file->getClientOriginalExtension();
-
-           $file->move('uploads/staffs',$filename);
 
 
-        }
 
-        $admin = Admin::create([
-            'full_name'=>$request->name,
-            'gender'=>$request->gender,
-            'email'=>$request->email,
-            'phone'=>$request->phone_number,
-            'address'=>$request->address,
-            'password'=>bcrypt($request->password),
-            'image'=>$filename,
 
-        ]);
-        $admin->roles()->attach($request->roles);
 
-        return redirect()->route('admin.registeredusers');
-    }
 
 
 
@@ -175,11 +133,11 @@ class AdminController extends Controller
             'address' => $request->address,
             'gender' => $request->gender,
             'phone_number' => $request->phone_number,
-            'membership_endDate' => now()->toDateString(), // Set the system date as membership_endDate
         ]);
 
         return response()->json(['message' => 'Registration completed successfully!', 'user' => $user, 'profile' => $profile], 201);
     }
+
 
     public function loginapp(Request $request)
     {
@@ -300,52 +258,38 @@ public function update(Request $request, $id)
 
     $user->update($validated);
     return response()->json(['message' => 'Profile updated successfully']);
-}
-public function updatePassword(Request $request, $userId)
+} public function updatePassword(Request $request)
 {
     // Validate the incoming request
-    $validated = $request->validate([
+    $request->validate([
         'current_password' => 'required|string',
         'new_password' => 'required|string|min:8|confirmed', // Confirmed requires a 'new_password_confirmation' field
     ]);
 
-    // Fetch the user instance from the database
-    $user = User::find($userId);
+    $user = Auth::user(); // Get the authenticated user
 
-    // Ensure user exists
+    // Ensure user is authenticated
     if (!$user) {
-        return response()->json(['error' => 'User not found.'], 404);
+        return response()->json(['error' => 'User not authenticated.'], 401);
     }
 
     // Check if the current password is correct
-    if (!Hash::check($validated['current_password'], $user->password)) {
-        return response()->json(['error' => 'The provided password does not match your current password.'], 401);
+    if (!Hash::check($request->current_password, $user->password)) {
+        throw ValidationException::withMessages([
+            'current_password' => ['The provided password does not match your current password.'],
+        ]);
     }
 
     // Update the password
-    $user->password = Hash::make($validated['new_password']);
+    $user->password = Hash::make($request->new_password);
 
     // Attempt to save the user
     try {
-        $user->save(); // Save the user instance
+        $user->save(); // This should not show an error if the user is an instance of User
         return response()->json(['message' => 'Password updated successfully.'], 200);
     } catch (\Exception $e) {
         return response()->json(['error' => 'Could not update password.'], 500);
     }
-}
-
-public function getMembershipEndDate($user_id)
-{
-    // Fetch the profile for the given user
-    $profile = Profile::where('user_id', $user_id)->first();
-
-    if (!$profile) {
-        return response()->json(['message' => 'Profile not found'], 404);
-    }
-
-    return response()->json([
-        'membership_endDate' => $profile->membership_endDate,
-    ], 200);
 }
 
 

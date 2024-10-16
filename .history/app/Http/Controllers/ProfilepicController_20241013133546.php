@@ -8,6 +8,24 @@ use Illuminate\Support\Facades\Log;
 
 class ProfilepicController extends Controller
 {
+    // Inside your ProfilepicController or a new UserProfileController
+public function getUserProfile($userId)
+{
+    try {
+        $user = User::with('profile')->findOrFail($userId); // Eager load profile relation
+        return response()->json([
+            'user' => $user,
+            'profile' => $user->profile
+        ], 200);
+    } catch (\Exception $e) {
+        Log::error('Error fetching user profile: ' . $e->getMessage());
+        return response()->json(['message' => 'User profile not found'], 404);
+    }
+}
+
+
+
+
     public function uploadProfileImage(Request $request)
 {
     try {
@@ -30,10 +48,10 @@ class ProfilepicController extends Controller
         return response()->json([
             'message' => 'Profile image uploaded successfully!',
             'profile' => [
-                'image' => url('storage/' . $profile->image),
-                // other profile fields
+                'image' => url('storage/' . $profile->image), // Ensure the filename is included
             ],
         ], 200);
+
     } catch (\Exception $e) {
         Log::error('Error uploading profile image: ' . $e->getMessage());
         return response()->json(['message' => 'Failed to upload image'], 500);

@@ -1,25 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-// Ensure this is included at the top of your AuthController
 
-
-use App\Models\User;
 
 use App\Models\Admin;
-use App\Models\Profile;
 use App\Models\Membership;
+use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
-
-
-
-
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -42,22 +33,24 @@ class AdminController extends Controller
     ]);
 
     $user = User::create([
-                'full_name' => $request->full_name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
+        'full_name' => $request->full_name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password), // Hash the password
+    ]);
 
-            $profile = Profile::create([
-                'user_id'=>$user->id,
-                'membership_id' => $request->membership,
-                'age' => $request->age,
-                'membership_endDate' => Carbon::now()->addDays(30),
-                'address' => $request->address,
-                'gender' => $request->gender,
-                'phone_number' => $request->phone_number,
-            ]);
-            return redirect()->route('admin.login')->with('success', 'Registration completed successfully!');
-        }
+    $profile = Profile::create([
+        'user_id' => $user->id,
+        'membership_id' => $request->membership,
+        'age' => $request->age,
+        'address' => $request->address,
+        'gender' => $request->gender,
+        'phone_number' => $request->phone_number,
+    ]);
+
+    return redirect()->route('admin.login')->with('success', 'Registration completed successfully!');
+}
+
+
 
 
 
@@ -86,7 +79,7 @@ class AdminController extends Controller
             }
         }
 
-        else if (Auth::guard(name: 'web')->attempt($credentials)) {
+        else if (Auth::guard('web')->attempt($credentials)) {
             $user = Auth::guard('web')->user(); // Fetch user
             if ($user) {
                 //dd($user);
@@ -98,52 +91,11 @@ class AdminController extends Controller
         ])->onlyInput('email');
     }
 
-    public function create_staff(){
-        $roles=Role::all();
-        return view('Admin.staff.createStaff',compact('roles'));
-    }
-
-    public function store(Request $request){
-        $request->validate([
-            'name'=>'required|string|max:255',
-            'gender'=>'required',
-            'email'=>['required',
-                     'email',
-                    'unique:admins,email'],
-            'phone_number'=>[
-                'required',
-                'digits:10',
-                'unique:admins,phone',
-            ],
-            'image' => 'required|mimes:jpeg,png,jpg,gif|max:2048',
-            'address'=>'required|string',
-            'password'=>'required',
-            'roles'=>'required',
-        ]);
-
-        if ($request->hasFile('image')){
-            $file = $request->file('image');
-            $filename=time(). "." . $file->getClientOriginalExtension();
-
-           $file->move('uploads/staffs',$filename);
 
 
-        }
 
-        $admin = Admin::create([
-            'full_name'=>$request->name,
-            'gender'=>$request->gender,
-            'email'=>$request->email,
-            'phone'=>$request->phone_number,
-            'address'=>$request->address,
-            'password'=>bcrypt($request->password),
-            'image'=>$filename,
 
-        ]);
-        $admin->roles()->attach($request->roles);
 
-        return redirect()->route('admin.registeredusers');
-    }
 
 
 
@@ -175,11 +127,11 @@ class AdminController extends Controller
             'address' => $request->address,
             'gender' => $request->gender,
             'phone_number' => $request->phone_number,
-            'membership_endDate' => now()->toDateString(), // Set the system date as membership_endDate
         ]);
 
         return response()->json(['message' => 'Registration completed successfully!', 'user' => $user, 'profile' => $profile], 201);
     }
+
 
     public function loginapp(Request $request)
     {
@@ -269,25 +221,29 @@ class AdminController extends Controller
 
 
 
-// Fetch user profile data by user ID
-public function show($id)
+
+public function show(Request $request)
 {
-    $user = User::find($id);
+    $user = $request->user(); // This fetches the authenticated user.
+
     if ($user) {
         return response()->json($user);
-    } else {
-        return response()->json(['error' => 'User not found'], 404);
     }
+
+    return response()->json(['error' => 'User not found'], 404);
 }
 
-// Update user profile data by user ID
-public function update(Request $request, $id)
+
+
+public function update(Request $request)
 {
-    $user = User::find($id);
+    $user = $request->user(); // Fetch the authenticated user
+
     if (!$user) {
         return response()->json(['error' => 'User not found'], 404);
     }
 
+    // Validate the incoming request data
     $validated = $request->validate([
         'email' => 'required|email',
         'full_name' => 'required|string',
@@ -298,54 +254,10 @@ public function update(Request $request, $id)
         'membership_id' => 'nullable|integer',
     ]);
 
+    // Update the user with the validated data
     $user->update($validated);
+
     return response()->json(['message' => 'Profile updated successfully']);
-}
-public function updatePassword(Request $request, $userId)
-{
-    // Validate the incoming request
-    $validated = $request->validate([
-        'current_password' => 'required|string',
-        'new_password' => 'required|string|min:8|confirmed', // Confirmed requires a 'new_password_confirmation' field
-    ]);
-
-    // Fetch the user instance from the database
-    $user = User::find($userId);
-
-    // Ensure user exists
-    if (!$user) {
-        return response()->json(['error' => 'User not found.'], 404);
-    }
-
-    // Check if the current password is correct
-    if (!Hash::check($validated['current_password'], $user->password)) {
-        return response()->json(['error' => 'The provided password does not match your current password.'], 401);
-    }
-
-    // Update the password
-    $user->password = Hash::make($validated['new_password']);
-
-    // Attempt to save the user
-    try {
-        $user->save(); // Save the user instance
-        return response()->json(['message' => 'Password updated successfully.'], 200);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Could not update password.'], 500);
-    }
-}
-
-public function getMembershipEndDate($user_id)
-{
-    // Fetch the profile for the given user
-    $profile = Profile::where('user_id', $user_id)->first();
-
-    if (!$profile) {
-        return response()->json(['message' => 'Profile not found'], 404);
-    }
-
-    return response()->json([
-        'membership_endDate' => $profile->membership_endDate,
-    ], 200);
 }
 
 

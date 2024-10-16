@@ -18,19 +18,19 @@ class MembershipController extends Controller
     public function store(Request $request){
         $request->validate([
             'membership_name' => 'required|string|max:255',
+            'duration' => 'required|string|max:50',
             'price' => 'required|numeric',
         ]);
 
         // Create a new membership
         Membership::create([
             'name' => $request->membership_name,
-
+            'duration' => $request->duration,
             'price' => $request->price,
         ]);
 
         return redirect()->route('admin.membership.index')->with('success', 'Membership added successfully!');
     }
-
 
     // Ensure this method is correctly defined
     public function getMemberships()
