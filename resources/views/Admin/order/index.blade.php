@@ -39,7 +39,8 @@
                                 <td>{{ $order->order_date }}</td>
 
                                 <td>
-                                    <form action="{{ route('admin.orders.update', $order->id) }}" method="POST">
+                                    {{ $order->payment_status }}
+                                    {{-- <form action="{{ route('admin.orders.update', $order->id) }}" method="POST">
                                         @csrf
                                         @method('PUT')
                                         <select name="payment_status" class="form-control payment-status-dropdown"
@@ -50,7 +51,7 @@
                                                 Paid</option>
                                         </select>
                                         <button type="submit" class="btn btn-sm btn-success mt-2">Update</button>
-                                    </form>
+                                    </form> --}}
                                 </td>
 
                                 <td>{{ $order->total_amount }}</td>

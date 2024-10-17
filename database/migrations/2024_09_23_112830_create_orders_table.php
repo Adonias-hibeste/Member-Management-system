@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('member_id');
+            $table->string('tx_ref')->unique();
             $table->date('order_date');
             $table->string('payment_status');
             $table->decimal('total_amount',10,2);

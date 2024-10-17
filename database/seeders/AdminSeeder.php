@@ -29,12 +29,12 @@ class AdminSeeder extends Seeder
         $admin->assignRole('admin');
 
 
-        $user=User::create([
-            'full_name' => 'user',
-            'email' => 'user@gmail.com',
-            'email_verified_at' => now(),
-            'password' =>  bcrypt('12345678'),
-        ]);
-        $user->assignRole('member');
+        // $user=User::create([
+        //     'full_name' => 'user',
+        //     'email' => 'user@gmail.com',
+        //     'email_verified_at' => now(),
+        //     'password' =>  bcrypt('12345678'),
+        // ]);
+        // $user->assignRole('member');
     }
 }

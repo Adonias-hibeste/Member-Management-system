@@ -12,7 +12,8 @@ class Order extends Model
         'member_id',
         'order_date',
         'payment_status',
-        'total_amount'
+        'total_amount',
+        'tx_ref'
     ];
 
      public function order_item(){
@@ -21,5 +22,9 @@ class Order extends Model
 
      public function user(){
         return $this->belongsTo(User::class,'member_id');
+     }
+
+     public function orderDetail(){
+        return $this->hasOne(OrderDetail::class);
      }
 }

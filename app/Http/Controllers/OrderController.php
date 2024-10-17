@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderItem;
+use App\Models\PendingOrder;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -40,8 +41,9 @@ class OrderController extends Controller
 
    public function checkout(Request $request)
    {
-    Log::info('Checkout method triggered', ['request' => $request->all()]);
-       // Validate the incoming request data
+       Log::info('Checkout method triggered', ['request' => $request->all()]);
+
+       // Validate request data
        $request->validate([
            'name' => "required|string",
            'email' => "required|email",
@@ -51,33 +53,27 @@ class OrderController extends Controller
            'house_no' => 'required|string|max:255'
        ]);
 
-       // Ensure the user is authenticated
+       // Ensure user is authenticated
        $userId = Auth::id();
        if (!$userId) {
            return response()->json(['error' => 'User not authenticated'], 401);
        }
 
-       // Get all cart items for the user
+       // Get cart items
        $cartItems = Cart::where('user_id', $userId)->with('product')->get();
        if ($cartItems->isEmpty()) {
            return response()->json(['error' => 'Cart is empty'], 400);
        }
 
-       // Calculate the total amount for the order
+       // Calculate total amount
        $totalAmount = $cartItems->sum(function ($cartItem) {
            return $cartItem->quantity * $cartItem->product->unit_price;
        });
-       $client = new Client();
 
-       $tx_ref = 'TX_' . uniqid() . '_' . Auth::id() . '_' . time(); // Ensure unique tx_ref
-
-       // Store tx_ref in session for later use in callback
-       Log::info('Generated tx_ref: ' . $tx_ref);
-
+       $tx_ref = 'TX_' . uniqid() . '_' . Auth::id() . '_' . time(); // Unique transaction reference
 
        // Chapa API endpoint for initiating payment
        $url = 'https://api.chapa.co/v1/transaction/initialize';
-
        $chapaSecretKey = 'CHASECK_TEST-apCgo8j5B4cpFmtlgV1NOAgpqp3PksVz';
 
        // Prepare data for Chapa API
@@ -94,27 +90,27 @@ class OrderController extends Controller
            ],
        ];
 
-       // Send the API request to Chapa
+       $client = new Client();
        $response = $client->post($url, [
-        'headers' => [
-            'Authorization' => 'Bearer ' . $chapaSecretKey,
-            'Content-Type' => 'application/json',
-        ],
-        'json' => $data,
-    ]);
+           'headers' => [
+               'Authorization' => 'Bearer ' . $chapaSecretKey,
+               'Content-Type' => 'application/json',
+           ],
+           'json' => $data,
+       ]);
 
-    $responseBody = json_decode($response->getBody(), true);
-
+       $responseBody = json_decode($response->getBody(), true);
 
        if ($responseBody['status'] === 'success') {
-           // Store checkout details in session to use after payment confirmation
-           session(['checkout_details' => [
+           // Store checkout details in database
+           $pending_order =PendingOrder ::create([
                'user_id' => $userId,
-               'cart_items' => $cartItems,
+               'tx_ref' => $tx_ref,
                'total_amount' => $totalAmount,
                'customer_info' => $request->only(['name', 'email', 'phone', 'city', 'woreda', 'house_no']),
-               'tx_ref' => $tx_ref,
-           ]]);
+           ]);
+
+           Log::info('pending_order details saved in database', ['pending_order' => $pending_order]);
 
            // Redirect to Chapa's payment page
            return redirect($responseBody['data']['checkout_url']);
@@ -123,57 +119,93 @@ class OrderController extends Controller
        }
    }
 
+
    public function paymentCallback(Request $request)
    {
        $tx_ref = $request->input('tx_ref'); // Transaction reference from Chapa
+       Log::info('Payment callback received', ['tx_ref' => $tx_ref]);
 
-       // Log the session data
-       Log::info('Session data on callback:', ['session' => session()->all()]);
+       // Chapa Secret Key
+       $chapaSecretKey = 'CHASECK_TEST-apCgo8j5B4cpFmtlgV1NOAgpqp3PksVz';
 
-       // Verify the payment with Chapa
-       $response = Http::withToken(env('CHAPA_SECRET_KEY'))->get('https://api.chapa.co/v1/transaction/verify/' . $tx_ref);
+       // Verify payment with Chapa
+       $response = Http::withToken($chapaSecretKey)->get('https://api.chapa.co/v1/transaction/verify/' . $tx_ref);
+       Log::info('Payment verification response: ', ['response' => $response->body()]);
 
        if ($response->successful()) {
            $paymentData = $response->json();
 
-           if ($paymentData['status'] == 'success') {
-               $checkoutDetails = session('checkout_details');
-               Log::info('Checkout details retrieved from session', ['checkoutDetails' => $checkoutDetails]);
+           if ($paymentData['status'] === 'success') {
+               // Retrieve checkout details from the database
+               $pending_order = PendingOrder::where('tx_ref', $tx_ref)->first();
 
-               // Check for authenticated user
-               $userId = Auth::id();
-               Log::info('Authenticated user ID:', ['userId' => $userId]);
-
-               if ($userId && $checkoutDetails['tx_ref'] === $tx_ref) {
+               if ($pending_order) {
                    DB::beginTransaction();
 
                    try {
                        // Create the order
                        $order = Order::create([
-                           'member_id' => $checkoutDetails['user_id'],
+                           'member_id' => $pending_order->user_id,
+                           'tx_ref'=>$pending_order->tx_ref,
                            'order_date' => now(),
                            'payment_status' => 'Paid',
-                           'total_amount' => $checkoutDetails['total_amount'],
+                           'total_amount' => $pending_order->total_amount,
                        ]);
 
-                       // Continue with order details and items...
-                       // ...
+                       Log::info('Order created successfully', ['order' => $order]);
+
+                       // Create the order details
+                       OrderDetail::create([
+                           'order_id' => $order->id,
+                           'name' => $pending_order->customer_info['name'],
+                           'email' => $pending_order->customer_info['email'],
+                           'phone' => $pending_order->customer_info['phone'],
+                           'city' => $pending_order->customer_info['city'],
+                           'woreda' => $pending_order->customer_info['woreda'],
+                           'house_no' => $pending_order->customer_info['house_no'],
+                       ]);
+
+                       // Loop through cart items to create order items
+                       $cartItems = Cart::where('user_id', $pending_order->user_id)->get();
+                       foreach ($cartItems as $cartItem) {
+                           $product = $cartItem->product;
+
+                           // Ensure product has enough stock
+                           if ($product->quantity < $cartItem->quantity) {
+                               return response()->json(['error' => 'Not enough stock for product: ' . $product->name], 400);
+                           }
+
+                           // Create order item
+                           OrderItem::create([
+                               'product_id' => $product->id,
+                               'order_id' => $order->id,
+                               'quantity' => $cartItem->quantity,
+                               'payment_status' => 'Paid',
+                               'price' => $product->unit_price,
+                           ]);
+
+                           // Deduct product stock
+                           $product->decrement('quantity', $cartItem->quantity);
+                       }
+
+                       // Clear the cart
+                       Cart::where('user_id', $pending_order->user_id)->delete();
 
                        DB::commit();
-                       return redirect()->route('order.success')->with('message', 'Payment successful, your order has been placed.');
+                       return redirect()->route('user.makeOrder')->with('message', 'Payment successful, your order has been placed.');
                    } catch (\Exception $e) {
                        DB::rollback();
                        Log::error('Order creation error: ' . $e->getMessage());
-                       return redirect()->route('order.failed')->with('error', 'An error occurred while placing your order.');
+                       return redirect()->route('user.makeOrder')->with('error', 'An error occurred while placing your order.');
                    }
                } else {
-                   Log::error('User not authenticated or transaction reference mismatch.');
-                   return redirect()->route('order.failed')->with('error', 'User not authenticated or transaction reference mismatch.');
+                   Log::error('pending_order not found for tx_ref: ' . $tx_ref);
+                   return redirect()->route('user.makeOrder')->with('error', 'Transaction reference mismatch or pending_order details not found.');
                }
            }
        }
 
-       return redirect()->route('order.failed')->with('error', 'Payment verification failed.');
+       return redirect()->route('user.makeOrder')->with('error', 'Payment verification failed.');
    }
 
 
@@ -183,18 +215,18 @@ public function show($id)
     return view('Admin.order.show', compact('order'));
 }
 
-public function update(Request $request, $id)
-{
-    //  $request->validate([
-    //     'payment_status' => 'required|string', // Ensure payment_status is present and a string
-    // ]);
-    //dd( $request->all());
-    $order = Order::find($id);
-    $order->payment_status = $request->input('payment_status');
-    $order->save();
+// public function update(Request $request, $id)
+// {
+//     //  $request->validate([
+//     //     'payment_status' => 'required|string', // Ensure payment_status is present and a string
+//     // ]);
+//     //dd( $request->all());
+//     $order = Order::find($id);
+//     $order->payment_status = $request->input('payment_status');
+//     $order->save();
 
-    return redirect()->back()->with('message', 'Payment status updated successfully');
-}
+//     return redirect()->back()->with('message', 'Payment status updated successfully');
+// }
 
 public function destroy($id){
 

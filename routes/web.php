@@ -128,12 +128,12 @@ Route::get('/', function () {
     Route::delete('/admin/orders/{id}/delete', [OrderController::class, 'destroy'])->name('admin.orders.delete');
 
 
-
+    Route::group(['middleware' => ['web']], function () {
     Route::get('/user/cart', [CartController::class, 'show'])->name('user.cart.show');
     Route::post('/user/cart/add', [CartController::class, 'add'])->name('user.cart.add');
     Route::post('/user/cart/update', [CartController::class, 'update'])->name('user.cart.update');
     Route::post('/user/cart/remove', [CartController::class, 'remove'])->name('user.cart.remove');
     Route::post('/user/checkout', [OrderController::class, 'checkout'])->name('checkout');
-    Route::get('/order/payment/callback', [PaymentController::class, 'paymentCallback'])->name('order.payment.callback');
-
+    Route::get('/order/payment/callback', [OrderController::class, 'paymentCallback'])->name('order.payment.callback');
+    });
 
