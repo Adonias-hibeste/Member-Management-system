@@ -36,7 +36,7 @@
                 <h2 class="font-semibold text-lg">From:</h2>
                 <p>Test Business</p>
                 <p>TIN: Test TIN</p>
-                <p>Phone: 0900123456</p>
+                <p>Phone: 09123456789</p>
                 <p>Address: Test Address</p>
             </div>
             <div class="text-right">
