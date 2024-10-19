@@ -51,7 +51,7 @@ class AdminController extends Controller
                 'user_id'=>$user->id,
                 'membership_id' => $request->membership,
                 'age' => $request->age,
-                'membership_endDate' => Carbon::now()->addDays(30),
+                'membership_endDate' => Carbon::now()->addDays(3),// change 30 days to 3 days
                 'address' => $request->address,
                 'gender' => $request->gender,
                 'phone_number' => $request->phone_number,

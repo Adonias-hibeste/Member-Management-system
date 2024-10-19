@@ -34,10 +34,19 @@
 
 
                                 <td>
-                                    <a href="" class="btn btn-primary">Edit</a>
+                                    <a href="{{ route('admin.catagory.edit', $catagory->id) }}"
+                                        class="btn btn-primary">Edit</a>
 
-                                    <a href="" class="btn btn-primary"
-                                        style="background-color: red; color: white; border-color: red;">Delete</a>
+                                    <form action="{{ route('admin.catagory.destroy', $catagory->id) }}" method="POST"
+                                        style="display: inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger"
+                                            onclick="return confirm('Are you sure you want to delete this catagory?')">Delete</button>
+                                    </form>
+
+                                    {{-- <a href="{{ route('admin.catagory.destroy', $catagory->id) }}" class="btn btn-primary"
+                                        style="background-color: red; color: white; border-color: red;">Delete</a> --}}
                                 </td>
                             </tr>
                         @endforeach

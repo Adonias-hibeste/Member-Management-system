@@ -84,6 +84,7 @@
                                     <th>phone_number</th>
                                     <th>Address</th>
                                     <th>Role</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             @foreach ($staffs as $staff)
@@ -118,25 +119,20 @@
                                 @foreach ($roles as $role)
                                     <tr>
                                         <td>{{ $role->name }}</td>
+
                                         <td>
-                                            <div class="row g-2">
-                                                <div style="margin-left: 12px; width:10px; padding-right: 55px;">
+                                            <a href="{{ route('admin.role.edit', $role->id) }}"
+                                                class="btn btn-primary">Edit</a>
 
-                                                    <a href="#"><i class="fa-solid fa-pen-to-square fa-2x"></i></a>
+                                            <form action="{{ route('admin.catagory.destroy', $catagory->id) }}"
+                                                method="POST" style="display: inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this catagory?')">Delete</button>
+                                            </form>
 
-                                                </div>
-                                                <div class="col" style="margin-right: 50px; width:5px;">
 
-                                                    <button class="btn btn-danger btn-sm ms-0"
-                                                        onclick="confirmDeletion({{ $role->id }})">X</button>
-                                                    <form id="delete-form-{{ $role->id }}" action="#"
-                                                        method="POST" style="display: none;">
-                                                        @csrf
-                                                        @method('delete')
-                                                    </form>
-
-                                                </div>
-                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

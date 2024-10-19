@@ -7,12 +7,12 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\EventRegisterController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PDFController;
-use App\Http\Controllers\AdminForgotPasswordController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\AdminPaymentController;
 use App\Http\Controllers\AdminPDFController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatagoryController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
@@ -26,8 +26,9 @@ Route::get('/', function () {
     Route::post('/admin/register', [App\Http\Controllers\AdminController::class, 'registerPost'])->name('admin.registerPost');
     Route::get('/admin/login', [App\Http\Controllers\AdminController::class, 'login'])->name('admin.login');
     Route::post('/admin/login', [App\Http\Controllers\AdminController::class, 'loginPost'])->name('admin.loginPost');
-    Route::get('/admin/forgot', [App\Http\Controllers\AdminForgotPasswordController::class, 'showForgotPasswordForm'])->name('admin.forgot');
-    Route::post('/admin/forgot', [AdminForgotPasswordController::class, 'sendResetLink'])->name('admin.sendResetLink');
+
+    Route::get('/admin/forgotpassword', [ForgotPasswordController::class, 'resetPassword'])->name('admin.forgotpassword');
+    Route::post('/admin/forgotpassword', [ForgotPasswordController::class, 'sendResetPassword'])->name('admin.sendResetPassword');
 
     Route::get('/admin/logout', [App\Http\Controllers\IsAdminController::class, 'AdminLogout'])->name('admin.logout');
 
@@ -68,6 +69,9 @@ Route::get('/', function () {
 
     Route::get('/admin/addrole',[RoleController::class,'create'])->name('admin.addRole');
     Route::post('/admin/storerole',[RoleController::class,'store'])->name('admin.role.store');
+    Route::get('/admin/role/edit/{id}',[RoleController::class,'edit'])->name('admin.role.edit');
+    Route::put('/admin/role/edit/{id}',[RoleController::class,'update'])->name('admin.role.update');
+
 
     Route::get('/admin/settings', [App\Http\Controllers\SettingController::class, 'index'])->name('admin.settings');
     Route::post('/admin/settings', [App\Http\Controllers\SettingController::class, 'savedata'])->name('admin.settings.addsettings');
@@ -107,10 +111,17 @@ Route::get('/', function () {
     Route::get('/admin/membership',[MembershipController::class,'index'])->name('admin.membership.index');
     Route::get('/admin/membership/create',[MembershipController::class,'create'])->name('admin.membership.create');
     Route::post('/admin/membership/store',[MembershipController::class,'store'])->name('admin.membership.store');
+    Route::get('/admin/membership/edit/{id}',[MembershipController::class,'edit'])->name('admin.membership.edit');
+    Route::put('/admin/membership/edit/{id}',[MembershipController::class,'update'])->name('admin.membership.update');
+    Route::delete('/admin/membership/delete/{id}',[MembershipController::class,'destroy'])->name('admin.membership.destroy');
+
 
     Route::get('/admin/catagories',[CatagoryController::class,'index'])->name('admin.catagories');
     Route::get('/admin/catagories/addCatagory',[CatagoryController::class,'create'])->name('admin.catagory.create');
     Route::post('/admin/catagory/create',[CatagoryController::class,'store'])->name('admin.catagory.store');
+    Route::get('/admin/catagory/edit/{id}',[CatagoryController::class,'edit'])->name('admin.catagory.edit');
+    Route::put('/admin/catagory/edit/{id}',[CatagoryController::class,'update'])->name('admin.catagory.update');
+    Route::delete('/admin/catagory/delete/{id}',[CatagoryController::class,'destroy'])->name('admin.catagory.destroy');
 
     Route::get('/admin/productlist',[ProductController::class,'index'])->name('admin.viewProducts');
     Route::get('/admin/products/{id}',[ProductController::class,'show'])->name('admin.viewProducts.details');

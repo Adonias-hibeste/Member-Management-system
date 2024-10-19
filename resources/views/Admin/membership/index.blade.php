@@ -36,10 +36,21 @@
 
 
                                 <td>
-                                    <a href="" class="btn btn-primary">Edit</a>
+                                    <a href="{{ route('admin.membership.edit', $membership->id) }}"
+                                        class="btn btn-primary">Edit</a>
 
-                                    <a href="" class="btn btn-primary"
-                                        style="background-color: red; color: white; border-color: red;">Delete</a>
+
+                                    <form action="{{ route('admin.membership.destroy', $membership->id) }}" method="POST"
+                                        style="display: inline">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button type="submit" class="btn btn-danger"
+                                            onclick="return confirm('Are you sure you want to delete this membership type?')">Delete</button>
+
+                                    </form>
+                                    {{-- <a href="" class="btn btn-primary"
+                                        style="background-color: red; color: white; border-color: red;">Delete</a> --}}
                                 </td>
                             </tr>
                         @endforeach

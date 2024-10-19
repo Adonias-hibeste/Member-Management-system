@@ -32,4 +32,8 @@ class RoleController extends Controller
 
 
     }
+    public function edit($id){
+        $role=Role::find($id);
+        return view('Admin.Role.edit',compact('role'));
+    }
 }

@@ -24,30 +24,26 @@
                                     <h3 class="text-center font-weight-light my-4">Reset Password</h3>
                                 </div>
                                 <div class="card-body">
-                                    @if (session('status'))
+                                    @if (session('success'))
                                         <div class="alert alert-success" role="alert">
-                                            {{ session('status') }}
+                                            {{ session('success') }}
                                         </div>
                                     @endif
-                                    <form action="{{ route('admin.sendResetLink') }}" method="POST">
+                                    <div>
+                                        <p>Please provide the email that you registered with so that we can reset your
+                                            password.</p>
+                                    </div>
+                                    <form action="{{ route('admin.sendResetPassword') }}" method="POST">
                                         @csrf
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" name="name" type="text" required />
-                                            <label for="name">Username</label>
+                                            <input class="form-control" name="email" type="email" required />
+                                            <label for="email">email</label>
+                                            @error('email')
+                                                <span class="d-block fs-6 text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" name="password" type="password" required />
-                                            <label for="password">New Password</label>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" name="password_confirmation" type="password"
-                                                required />
-                                            <label for="password_confirmation">Confirm Password</label>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                            <a class="small" href="{{ route('admin.login') }}">Return to login</a>
-                                            <button class="btn btn-primary" type="submit">Reset Password</button>
-                                        </div>
+                                        <button class="btn btn-primary w-100" type="submit">Reset Password</button>
+
                                     </form>
                                 </div>
                                 <div class="card-footer text-center py-3">

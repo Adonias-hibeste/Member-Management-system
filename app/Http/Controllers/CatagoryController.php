@@ -34,9 +34,37 @@ class CatagoryController extends Controller
         return redirect()->route('admin.catagories')->with('success', 'Catagory created successfully');
     }
 
+    public function edit($id){
+        $catagory=Catagory::find($id);
+        return view('Admin.catagories.edit',compact('catagory'));
+    }
+
+    public function update(Request $request, $id){
+        $request->validate([
+            'catagory_name'=>'required|string|max:255',
+            'description'=>'required|max:1000',
+        ]);
+
+        $catagory=Catagory::find($id);
+
+        $catagory->name=$request->catagory_name;
+        $catagory->	description	=$request->description;
+
+        $catagory->save();
+
+        return redirect()->route('admin.catagories')->with('sucess','catagory updated successfully');
+    }
+
+    public function destroy($id){
+        $catagory=Catagory::find($id);
+        $catagory->delete();
+        return redirect()->route('admin.catagories')->with('sucess','catagory deleted sucessfully');
+    }
+
     // Ensure this method is correctly defined
     public function categoryapp(){
         $catagories = Catagory::all();
         return response()->json($catagories);
+
     }
 }

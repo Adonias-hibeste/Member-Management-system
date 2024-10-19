@@ -3,10 +3,7 @@
 @section('content')
     <div class="container-fluid px-4">
         <div class="card shadow mt-4">
-
             <h2 class="mb-0">Order Details - #{{ $order->id }}</h2>
-
-
 
             <div class="card-body">
                 <!-- Order Info -->

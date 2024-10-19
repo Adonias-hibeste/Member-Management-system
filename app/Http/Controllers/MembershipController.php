@@ -32,6 +32,39 @@ class MembershipController extends Controller
     }
 
 
+    public function edit($id){
+        $membership=Membership::find($id);
+        return view('Admin.membership.edit',compact('membership'));
+
+    }
+
+    public function update(Request $request, $id){
+
+        $request->validate([
+            'membership_name'=>'required|max:255',
+            'price'=>'required|numeric'
+        ]);
+
+        $membership=Membership::find($id);
+
+        $membership->name=$request->membership_name;
+        $membership->price=$request->price;
+
+        $membership->save();
+
+        return redirect()->route('admin.membership.index')->with('sucess','membership type updated sucessfully');
+
+
+    }
+
+    public function destroy($id){
+        $membership=Membership::find($id);
+
+        $membership->delete();
+
+        return redirect()->route('admin.membership.index')->with('success','memberhip type deleted sucessfully');
+    }
+
     // Ensure this method is correctly defined
     public function getMemberships()
     {
