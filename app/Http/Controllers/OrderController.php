@@ -238,4 +238,162 @@ public function destroy($id){
 
 
 
+
+
+
+public function checkoutapp(Request $request)
+{
+    Log::info('Checkout method triggered', ['request' => $request->all()]);
+
+    // Validate request data
+    $request->validate([
+        'name' => "required|string",
+        'email' => "required|email",
+        'phone' => 'required|digits:10',
+        'city' => 'required|string|max:255',
+        'woreda' => 'required|string|max:255',
+        'house_no' => 'required|string|max:255',
+
+    ]);
+
+    // Ensure user is authenticated
+    $userId = Auth::id();
+    if (!$userId) {
+        return response()->json(['error' => 'User not authenticated'], 401);
+    }
+
+
+    $tx_ref = 'TX_' . uniqid() . '_' . Auth::id() . '_' . time(); // Unique transaction reference
+
+    // Chapa API endpoint for initiating payment
+    $url = 'https://api.chapa.co/v1/transaction/initialize';
+    $chapaSecretKey = 'CHASECK_TEST-apCgo8j5B4cpFmtlgV1NOAgpqp3PksVz';
+
+    // Prepare data for Chapa API
+    $data = [
+       'amount' => $request->input('amount'),
+        'currency' => 'ETB',
+        'email' => $request->email,
+        'first_name' => $request->name,
+        'tx_ref' => $tx_ref,
+        'callback_url' => route('order.payment.callback', ['tx_ref' => $tx_ref]),
+        'customization' => [
+            'title' => 'Order Payment',
+            'description' => 'Payment for your order',
+        ],
+    ];
+
+    $client = new Client();
+    $response = $client->post($url, [
+        'headers' => [
+            'Authorization' => 'Bearer ' . $chapaSecretKey,
+            'Content-Type' => 'application/json',
+        ],
+        'json' => $data,
+    ]);
+
+    $responseBody = json_decode($response->getBody(), true);
+
+    if ($responseBody['status'] === 'success') {
+        // Store checkout details in database
+
+
+
+
+        // Return success response with checkout URL
+        return response()->json(['checkout_url' => $responseBody['data']['checkout_url']], 200);
+    } else {
+        return response()->json(['error' => 'Payment initiation failed.'], 500);
+    }
+}
+
+public function paymentCallbackapp(Request $request)
+{
+    $tx_ref = $request->input('tx_ref'); // Transaction reference from Chapa
+    Log::info('Payment callback received', ['tx_ref' => $tx_ref]);
+
+    // Chapa Secret Key
+    $chapaSecretKey = 'CHASECK_TEST-apCgo8j5B4cpFmtlgV1NOAgpqp3PksVz';
+
+    // Verify payment with Chapa
+    $response = Http::withToken($chapaSecretKey)->get('https://api.chapa.co/v1/transaction/verify/' . $tx_ref);
+    Log::info('Payment verification response: ', ['response' => $response->body()]);
+
+    if ($response->successful()) {
+        $paymentData = $response->json();
+
+        if ($paymentData['status'] === 'success') {
+            // Retrieve checkout details from the database
+            $pending_order = PendingOrder::where('tx_ref', $tx_ref)->first();
+
+            if ($pending_order) {
+                DB::beginTransaction();
+
+                try {
+                    // Create the order
+                    $order = Order::create([
+                        'member_id' => $pending_order->user_id,
+                        'tx_ref' => $pending_order->tx_ref,
+                        'order_date' => now(),
+                        'payment_status' => 'Paid',
+                        'total_amount' => $pending_order->total_amount,
+                    ]);
+
+                    Log::info('Order created successfully', ['order' => $order]);
+
+                    // Create the order details
+                    OrderDetail::create([
+                        'order_id' => $order->id,
+                        'name' => $pending_order->customer_info['name'],
+                        'email' => $pending_order->customer_info['email'],
+                        'phone' => $pending_order->customer_info['phone'],
+                        'city' => $pending_order->customer_info['city'],
+                        'woreda' => $pending_order->customer_info['woreda'],
+                        'house_no' => $pending_order->customer_info['house_no'],
+                    ]);
+
+                    // Loop through cart items to create order items
+                    $cartItems = Cart::where('user_id', $pending_order->user_id)->get();
+                    foreach ($cartItems as $cartItem) {
+                        $product = $cartItem->product;
+
+                        // Ensure product has enough stock
+                        if ($product->quantity < $cartItem->quantity) {
+                            return response()->json(['error' => 'Not enough stock for product: ' . $product->name], 400);
+                        }
+
+                        // Create order item
+                        OrderItem::create([
+                            'product_id' => $product->id,
+                            'order_id' => $order->id,
+                            'quantity' => $cartItem->quantity,
+                            'payment_status' => 'Paid',
+                            'price' => $product->unit_price,
+                        ]);
+
+                        // Deduct product stock
+                        $product->decrement('quantity', $cartItem->quantity);
+                    }
+
+                    // Clear the cart
+                    Cart::where('user_id', $pending_order->user_id)->delete();
+
+                    DB::commit();
+                    return response()->json(['message' => 'Payment successful, your order has been placed.'], 200);
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    Log::error('Order creation error: ' . $e->getMessage());
+                    return response()->json(['error' => 'An error occurred while placing your order.'], 500);
+                }
+            } else {
+                Log::error('pending_order not found for tx_ref: ' . $tx_ref);
+                return response()->json(['error' => 'Transaction reference mismatch or pending_order details not found.'], 404);
+            }
+        }
+    }
+
+    return response()->json(['error' => 'Payment verification failed.'], 500);
+}
+
+
 }

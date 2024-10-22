@@ -4,15 +4,18 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\profilecontroller;
 use App\Http\Controllers\CatagoryController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\ProfilepicController;
 use App\Http\Controllers\EventRegisterController;
+use App\Http\Controllers\ForgotPasswordController;
 
      Route::get('memberships', [MembershipController::class, 'getMemberships']);
      Route::post('register', [AdminController::class, 'registerapp']);
@@ -25,6 +28,15 @@ use App\Http\Controllers\EventRegisterController;
      Route::get('/user/{user_id}/membership-enddate', [AdminController::class, 'getMembershipEndDate']);
 
 
+     Route::post('/user/membershipPayment/process', [PaymentController::class, 'processPaymentapp']);
+     Route::get('/user/membershipPayment/callbackapp', [PaymentController::class, 'paymentCallbackapp'])->name('membershipPayment.callbackapp');
+
+     Route::get('/admin/forgotpassword', [ForgotPasswordController::class, 'resetPassword'])->name('admin.forgotpasswordapp');
+     Route::post('/admin/forgotpassword', [ForgotPasswordController::class, 'sendResetPassword'])->name('admin.sendResetPasswordapp');
+
+
+     Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkoutapp');
+     Route::get('/payment/callbackapp', [OrderController::class, 'paymentCallback'])->name('order.payment.callbackspp');
      Route::delete('user/{id}', [AdminController::class, 'deleteUser']);
 
      Route::get('categories', [CatagoryController::class, 'categoryapp']);
