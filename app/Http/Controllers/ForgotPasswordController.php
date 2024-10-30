@@ -39,4 +39,25 @@ class ForgotPasswordController extends Controller
 
     return mt_rand(100000,999999);
     }
+    public function sendResetPasswordapp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|exists:users,email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        $newPassword = $this->generatePassword();
+        $user->password = bcrypt($newPassword);
+        $user->save();
+
+        Mail::to($user->email)->send(new ResetPassword($user, $newPassword));
+
+        return response()->json(['success' => 'Your password has been reset successfully. Check your email for the new password.'], 200);
+    }
+
+    private function generatePasswordapp()
+    {
+        return mt_rand(100000, 999999);
+    }
 }

@@ -27,7 +27,7 @@ use App\Http\Controllers\ForgotPasswordController;
      Route::post('user/{userId}/update-password', [AdminController::class, 'updatePassword']);
      Route::get('/user/{user_id}/membership-enddate', [AdminController::class, 'getMembershipEndDate']);
 
-
+     Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetPasswordapp']);
      Route::post('/user/membershipPayment/process', [PaymentController::class, 'processPaymentapp']);
      Route::get('/user/membershipPayment/callbackapp', [PaymentController::class, 'paymentCallbackapp'])->name('membershipPayment.callbackapp');
 

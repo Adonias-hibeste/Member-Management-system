@@ -67,8 +67,9 @@ class MembershipController extends Controller
 
     // Ensure this method is correctly defined
     public function getMemberships()
-    {
-        $memberships = Membership::all();
-        return response()->json($memberships);
-    }
+{
+    $memberships = Membership::all(['id', 'name', 'price']);
+    return response()->json($memberships);
+}
+
 }
