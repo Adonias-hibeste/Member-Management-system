@@ -35,14 +35,13 @@ This project is a member management backend built using Laravel. It includes two
    ```bash
    cd your-repo-name
    composer install
-   
-
+   ```
 3. **Set up Environment Variables**:
-  Duplicate .env.example and rename it to .env.
+  Duplicate .env.example and rename it to .env.//
 
 4. **Generate Application Key**
    ```bash
-  php artisan key:generate
+   php artisan key:generate
 
 5. **Run Migrations**
    ```bash
